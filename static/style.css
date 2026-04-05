@@ -1,0 +1,253 @@
+/* ── Layout ──────────────────────────────────────────────────── */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--pico-background-color);
+  border-bottom: 1px solid var(--pico-muted-border-color);
+  padding: 0.75rem 1.5rem;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-title {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.header-title strong {
+  font-size: 1.1rem;
+}
+
+.last-updated {
+  font-size: 0.8rem;
+  color: var(--pico-muted-color);
+}
+
+.header-actions button {
+  margin: 0;
+}
+
+.app-body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: calc(100vh - 57px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+
+.sidebar {
+  border-right: 1px solid var(--pico-muted-border-color);
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar h6 {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--pico-muted-color);
+}
+
+.bill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.bill-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--pico-border-radius);
+  font-size: 0.875rem;
+  cursor: default;
+}
+
+.bill-list li:hover {
+  background: var(--pico-secondary-background);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--pico-muted-color);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  margin: 0;
+  width: auto;
+}
+
+.remove-btn:hover {
+  color: var(--pico-del-color);
+}
+
+.add-bill-form {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.add-bill-form input {
+  margin: 0;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.6rem;
+  min-width: 0;
+}
+
+.add-btn {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.add-error {
+  font-size: 0.78rem;
+  color: var(--pico-del-color);
+  margin: 0.25rem 0 0;
+}
+
+/* ── Main content ────────────────────────────────────────────── */
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  gap: 0.75rem;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.action-count {
+  font-size: 0.8rem;
+  color: var(--pico-muted-color);
+}
+
+.table-toolbar select {
+  margin: 0;
+  width: auto;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.table-wrap {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+}
+
+.table-wrap table {
+  margin: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-wrap thead th {
+  position: sticky;
+  top: 0;
+  background: var(--pico-background-color);
+  border-bottom: 2px solid var(--pico-muted-border-color);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 1;
+}
+
+.table-wrap td, .table-wrap th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  vertical-align: top;
+}
+
+/* Bill ID column */
+.table-wrap td:first-child {
+  white-space: nowrap;
+  font-family: var(--pico-font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--pico-primary);
+}
+
+/* Date column */
+.table-wrap td:nth-child(2) {
+  white-space: nowrap;
+  color: var(--pico-muted-color);
+  font-size: 0.8rem;
+}
+
+/* Chamber column */
+.table-wrap td:nth-child(3) {
+  white-space: nowrap;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--pico-muted-color);
+  padding: 2rem !important;
+}
+
+/* ── Toast ───────────────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--pico-border-radius);
+  font-size: 0.875rem;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: opacity 0.3s;
+}
+
+.toast.success {
+  background: var(--pico-ins-color);
+  color: #fff;
+}
+
+.toast.error {
+  background: var(--pico-del-color);
+  color: #fff;
+}
+
+.toast.hidden {
+  display: none;
+}
+
+/* ── Fetch button busy state ─────────────────────────────────── */
+
+#fetch-btn[aria-busy="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}

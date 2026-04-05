@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Illinois Legislative Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-title">
+        <strong>Illinois Legislative Tracker</strong>
+        <span id="last-updated" class="last-updated"></span>
+      </div>
+      <div class="header-actions">
+        <button id="fetch-btn" onclick="fetchUpdates()">Fetch Updates</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <div class="app-body">
+
+    <!-- Sidebar: bill list -->
+    <aside class="sidebar">
+      <h6>Tracked Bills</h6>
+      <ul id="bill-list" class="bill-list"></ul>
+
+      <div class="add-bill-form">
+        <input
+          id="add-bill-input"
+          type="text"
+          placeholder="e.g. HB1288"
+          onkeydown="if(event.key==='Enter') addBill()"
+        />
+        <button id="add-bill-btn" onclick="addBill()" class="add-btn">Add</button>
+      </div>
+      <p id="add-error" class="add-error hidden"></p>
+    </aside>
+
+    <!-- Main: actions table -->
+    <main class="main-content">
+      <div class="table-toolbar">
+        <span id="action-count" class="action-count"></span>
+        <select id="bill-filter" onchange="applyFilter()">
+          <option value="">All Bills</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bill</th>
+              <th>Date</th>
+              <th>Chamber</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="actions-tbody">
+            <tr><td colspan="4" class="empty-state">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
