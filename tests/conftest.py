@@ -27,7 +27,7 @@ def db():
     tests always use the same schema as production.
     """
     from database import init_db
-    conn = sqlite3.connect(":memory:")
+    conn = sqlite3.connect(":memory:", check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys=ON")
     with patch("database.get_connection", return_value=conn), \
