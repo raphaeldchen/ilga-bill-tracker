@@ -146,3 +146,22 @@ def test_fetch_updates_rate_limit_returns_429(client, db):
         res = client.post("/api/fetch")
 
     assert res.status_code == 429
+
+
+# ── GET /api/actions/export ───────────────────────────────────────────────────
+
+def test_export_actions(client, db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Bill A', '104th')")
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('SB0019', 'Bill B', '104th')")
+        db.execute("INSERT INTO actions (bill_id, date, chamber, description, order_num) VALUES ('HB1288', '2025-01-15', 'House', 'First reading', 1)")
+        db.execute("INSERT INTO actions (bill_id, date, chamber, description, order_num) VALUES ('SB0019', '2025-01-16', 'Senate', 'First reading', 1)")
+
+    res = client.get("/api/actions/export")
+    assert res.status_code == 200
+    assert "attachment" in res.headers["content-disposition"]
+    assert "legislative_tracker_updates.json" in res.headers["content-disposition"]
+    data = res.json()
+    assert len(data) == 2
+    bill_ids = {a["bill_id"] for a in data}
+    assert bill_ids == {"HB1288", "SB0019"}
