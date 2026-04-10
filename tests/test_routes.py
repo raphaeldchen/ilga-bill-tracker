@@ -27,53 +27,53 @@ def test_list_bills(client, db):
 # ── POST /api/bills ───────────────────────────────────────────────────────────
 
 @pytest.fixture
-def auth_headers():
-    """Returns a cookies dict with a valid signed admin session cookie."""
-    return {COOKIE_NAME: _make_cookie_value()}
+def auth_client(client):
+    """TestClient with a valid signed admin session cookie pre-set."""
+    client.cookies.set(COOKIE_NAME, _make_cookie_value())
+    return client
 
 
-def test_add_bill_route_success(client, auth_headers):
+def test_add_bill_route_success(auth_client):
     with patch("services.bills.fetch_bills", new_callable=AsyncMock) as mock_fetch:
         mock_fetch.return_value = [("HB1288", FAKE_BILL)]
-        res = client.post("/api/bills", json={"bill_id": "HB1288"}, cookies=auth_headers)
+        res = auth_client.post("/api/bills", json={"bill_id": "HB1288"})
     assert res.status_code == 201
     data = res.json()
     assert data["id"] == "HB1288"
     assert data["title"] == "TEST BILL"
 
 
-def test_add_bill_normalizes_input(client, auth_headers):
-    """Lowercase and spaced input is normalized before lookup."""
+def test_add_bill_normalizes_input(auth_client):
     with patch("services.bills.fetch_bills", new_callable=AsyncMock) as mock_fetch:
         mock_fetch.return_value = [("HB1288", FAKE_BILL)]
-        res = client.post("/api/bills", json={"bill_id": "hb 1288"}, cookies=auth_headers)
+        res = auth_client.post("/api/bills", json={"bill_id": "hb 1288"})
     assert res.status_code == 201
     assert res.json()["id"] == "HB1288"
 
 
-def test_add_bill_duplicate_returns_409(client, db, auth_headers):
+def test_add_bill_duplicate_returns_409(auth_client, db):
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test Bill', '104th')")
-    res = client.post("/api/bills", json={"bill_id": "HB1288"}, cookies=auth_headers)
+    res = auth_client.post("/api/bills", json={"bill_id": "HB1288"})
     assert res.status_code == 409
     assert "already tracked" in res.json()["detail"]
 
 
-def test_add_bill_not_found_returns_404(client, auth_headers):
+def test_add_bill_not_found_returns_404(auth_client):
     with patch("services.bills.fetch_bills", new_callable=AsyncMock) as mock_fetch:
         mock_fetch.return_value = [("HB9999", ValueError("No results found for HB9999 in session 104th"))]
-        res = client.post("/api/bills", json={"bill_id": "HB9999"}, cookies=auth_headers)
+        res = auth_client.post("/api/bills", json={"bill_id": "HB9999"})
     assert res.status_code == 404
     assert "No results found" in res.json()["detail"]
 
 
 # ── DELETE /api/bills/{bill_id} ───────────────────────────────────────────────
 
-def test_delete_bill(client, db, auth_headers):
+def test_delete_bill(auth_client, db):
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test Bill', '104th')")
         db.execute("INSERT INTO actions (bill_id, date, chamber, description, order_num) VALUES ('HB1288', '2025-01-15', 'House', 'First reading', 1)")
-    res = client.delete("/api/bills/HB1288", cookies=auth_headers)
+    res = auth_client.delete("/api/bills/HB1288")
     assert res.status_code == 204
     row = db.execute("SELECT * FROM bills WHERE id = 'HB1288'").fetchone()
     assert row is None
@@ -81,8 +81,8 @@ def test_delete_bill(client, db, auth_headers):
     assert len(actions) == 0
 
 
-def test_delete_bill_not_found_returns_404(client, auth_headers):
-    res = client.delete("/api/bills/HB9999", cookies=auth_headers)
+def test_delete_bill_not_found_returns_404(auth_client):
+    res = auth_client.delete("/api/bills/HB9999")
     assert res.status_code == 404
 
 
@@ -122,14 +122,12 @@ def test_get_actions_filter_by_bill(client, db):
 
 # ── POST /api/fetch ───────────────────────────────────────────────────────────
 
-def test_fetch_updates_success(client, db, auth_headers):
+def test_fetch_updates_success(auth_client, db):
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test', '104th')")
-
     with patch("services.bills.fetch_bills", new_callable=AsyncMock) as mock_fetch:
         mock_fetch.return_value = [("HB1288", FAKE_BILL)]
-        res = client.post("/api/fetch", cookies=auth_headers)
-
+        res = auth_client.post("/api/fetch")
     assert res.status_code == 200
     data = res.json()
     assert data["updated"] == 1
@@ -137,15 +135,13 @@ def test_fetch_updates_success(client, db, auth_headers):
     assert data["errors"] == []
 
 
-def test_fetch_updates_rate_limit_returns_429(client, db, auth_headers):
+def test_fetch_updates_rate_limit_returns_429(auth_client, db):
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test', '104th')")
-
     from services.openstates import RateLimitError
     with patch("services.bills.fetch_bills", new_callable=AsyncMock) as mock_fetch:
         mock_fetch.return_value = [("HB1288", RateLimitError("rate limit exceeded"))]
-        res = client.post("/api/fetch", cookies=auth_headers)
-
+        res = auth_client.post("/api/fetch")
     assert res.status_code == 429
 
 
