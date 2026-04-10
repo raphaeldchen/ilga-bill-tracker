@@ -7,7 +7,7 @@ load_dotenv()
 OPENSTATES_API_KEY: str = os.getenv("OPENSTATES_API_KEY", "")
 OPENSTATES_BASE_URL: str = "https://v3.openstates.org"
 IL_JURISDICTION: str = "ocd-jurisdiction/country:us/state:il/government"
-IL_SESSION: str = "2025-2026"
+IL_SESSION: str = "104th"
 
 DB_PATH: Path = Path(__file__).parent / "data" / "tracker.db"
 

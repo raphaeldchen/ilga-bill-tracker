@@ -150,7 +150,7 @@ async function fetchUpdates() {
     );
 
     if (result.errors.length > 0) {
-      showToast('Could not fetch: ' + result.errors.map(function(e) { return e.bill_id; }).join(', '), 'error');
+      showToast('Could not fetch: ' + result.errors.map(function(e) { return e.bill_id + ' (' + e.error + ')'; }).join('; '), 'error');
     }
 
     setLastUpdated();
