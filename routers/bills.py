@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from services.bills import get_all_bills, bill_exists, remove_bill, add_bill
 from services.openstates import normalize_bill_id
+from routers.auth import require_admin
 
 router = APIRouter(prefix="/api/bills", tags=["bills"])
 
@@ -15,7 +16,7 @@ def list_bills() -> list[dict]:
     return get_all_bills()
 
 
-@router.post("", status_code=201)
+@router.post("", status_code=201, dependencies=[Depends(require_admin)])
 async def create_bill(body: AddBillRequest) -> dict:
     bill_id = normalize_bill_id(body.bill_id)
     if bill_exists(bill_id):
@@ -28,7 +29,7 @@ async def create_bill(body: AddBillRequest) -> dict:
         raise HTTPException(status_code=404, detail=str(exc))
 
 
-@router.delete("/{bill_id}", status_code=204)
+@router.delete("/{bill_id}", status_code=204, dependencies=[Depends(require_admin)])
 def delete_bill(bill_id: str) -> None:
     if not remove_bill(normalize_bill_id(bill_id)):
         raise HTTPException(status_code=404, detail=f"{bill_id} not found")

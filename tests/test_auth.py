@@ -3,6 +3,7 @@ import pytest
 import sqlite3
 from fastapi.testclient import TestClient
 from unittest.mock import patch
+from routers.auth import COOKIE_NAME
 
 
 @pytest.fixture
@@ -45,3 +46,50 @@ def test_read_apis_accessible_without_cookie(auth_client):
     assert res.status_code == 200
     res = auth_client.get("/api/actions")
     assert res.status_code == 200
+
+
+def test_login_page_accessible(auth_client):
+    res = auth_client.get("/login")
+    assert res.status_code == 200
+
+
+def test_login_success_redirects_to_admin(auth_client):
+    res = auth_client.post(
+        "/login",
+        data={"password": "testpass"},
+        follow_redirects=False,
+    )
+    assert res.status_code == 303
+    assert res.headers["location"] == "/admin"
+    assert COOKIE_NAME in res.cookies
+
+
+def test_login_wrong_password_redirects_back_with_error(auth_client):
+    res = auth_client.post(
+        "/login",
+        data={"password": "wrong"},
+        follow_redirects=False,
+    )
+    assert res.status_code == 303
+    assert "login" in res.headers["location"]
+    assert "error" in res.headers["location"]
+    assert COOKIE_NAME not in res.cookies
+
+
+def test_admin_page_without_cookie_redirects_to_login(auth_client):
+    res = auth_client.get("/admin", follow_redirects=False)
+    assert res.status_code == 303
+    assert "/login" in res.headers["location"]
+
+
+def test_admin_page_with_valid_cookie(auth_client):
+    auth_client.post("/login", data={"password": "testpass"})
+    res = auth_client.get("/admin")
+    assert res.status_code == 200
+
+
+def test_logout_redirects_to_root(auth_client):
+    auth_client.post("/login", data={"password": "testpass"})
+    res = auth_client.get("/logout", follow_redirects=False)
+    assert res.status_code == 303
+    assert res.headers["location"] == "/"
