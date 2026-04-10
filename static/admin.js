@@ -3,6 +3,11 @@ let allActions = [];
 document.addEventListener('DOMContentLoaded', function() {
   loadBills();
   loadActions();
+
+  document.getElementById('bill-list').addEventListener('click', function(e) {
+    var btn = e.target.closest('.remove-btn');
+    if (btn) removeBill(btn.dataset.billId);
+  });
 });
 
 async function loadBills() {
@@ -29,7 +34,7 @@ function renderBills(bills) {
   list.innerHTML = bills.map(function(b) {
     var id = escapeHtml(b.id);
     return '<li><span>' + id + '</span>' +
-      '<button class="remove-btn" title="Remove ' + id + '" onclick="removeBill(\'' + id + '\')">&times;</button>' +
+      '<button class="remove-btn" data-bill-id="' + id + '" title="Remove ' + id + '">&times;</button>' +
       '</li>';
   }).join('');
 

@@ -15,6 +15,7 @@ if not SECRET_KEY:
     SECRET_KEY = "dev-secret-key"
 COOKIE_NAME = "admin_session"
 COOKIE_MAX_AGE = 8 * 60 * 60  # 8 hours
+SECURE_COOKIES = os.getenv("SECURE_COOKIES", "false").lower() == "true"
 
 _serializer = URLSafeTimedSerializer(SECRET_KEY)
 
@@ -59,6 +60,7 @@ async def login(request: Request):
         max_age=COOKIE_MAX_AGE,
         httponly=True,
         samesite="lax",
+        secure=SECURE_COOKIES,
     )
     return resp
 
@@ -66,7 +68,7 @@ async def login(request: Request):
 @router.get("/logout")
 def logout():
     resp = RedirectResponse(url="/", status_code=303)
-    resp.delete_cookie(COOKIE_NAME, httponly=True, samesite="lax")
+    resp.delete_cookie(COOKIE_NAME, path="/")
     return resp
 
 
