@@ -1,6 +1,9 @@
 import sqlite3
+from datetime import datetime, timezone, timedelta
 from database import get_connection
 from services.openstates import fetch_bills, extract_chamber, RateLimitError
+
+CACHE_HOURS = 12
 
 
 def get_all_bills() -> list[dict]:
@@ -66,14 +69,22 @@ async def add_bill(bill_id: str) -> dict:
 async def fetch_all_updates() -> dict:
     """
     Pull the latest actions for every tracked bill from OpenStates.
+    Bills fetched within the last CACHE_HOURS are skipped.
     Inserts only actions not already in the database.
     Returns a summary dict.
     """
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=CACHE_HOURS)
+    cutoff_str = cutoff.strftime("%Y-%m-%d %H:%M:%S")
+
     with get_connection() as conn:
-        bill_ids = [r[0] for r in conn.execute("SELECT id FROM bills").fetchall()]
+        rows = conn.execute(
+            "SELECT id FROM bills WHERE last_fetched_at IS NULL OR last_fetched_at < ?",
+            (cutoff_str,),
+        ).fetchall()
+        bill_ids = [r[0] for r in rows]
 
     if not bill_ids:
-        return {"updated": 0, "new_actions": 0, "errors": []}
+        return {"updated": 0, "new_actions": 0, "errors": [], "skipped": "all bills fetched within the last 12 hours"}
 
     results = await fetch_bills(bill_ids)
 
@@ -85,14 +96,15 @@ async def fetch_all_updates() -> dict:
     if len(rate_limited) == len(results):
         raise RateLimitError(str(rate_limited[0][1]))
 
+    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     with get_connection() as conn:
         for bill_id, data in results:
             if isinstance(data, Exception):
                 errors.append({"bill_id": bill_id, "error": str(data)})
                 continue
             conn.execute(
-                "UPDATE bills SET title = ?, session = ? WHERE id = ?",
-                (data.get("title", ""), data.get("session", ""), bill_id),
+                "UPDATE bills SET title = ?, session = ?, last_fetched_at = ? WHERE id = ?",
+                (data.get("title", ""), data.get("session", ""), now_str, bill_id),
             )
             new_actions += _upsert_actions(conn, bill_id, data.get("actions", []))
 

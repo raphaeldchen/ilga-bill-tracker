@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Illinois Legislative Tracker</title>
+  <title>Admin - Illinois Legislative Tracker</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
@@ -13,6 +13,12 @@
     <div class="header-inner">
       <div class="header-title">
         <strong>Illinois Legislative Tracker</strong>
+        <span class="admin-badge">Admin</span>
+        <span id="last-updated" class="last-updated"></span>
+      </div>
+      <div class="header-actions">
+        <button id="fetch-btn" onclick="fetchUpdates()">Fetch Updates</button>
+        <a href="/logout" role="button" class="secondary outline logout-btn">Log out</a>
       </div>
     </div>
   </header>
@@ -24,6 +30,17 @@
     <aside class="sidebar">
       <h6>Tracked Bills</h6>
       <ul id="bill-list" class="bill-list"></ul>
+
+      <div class="add-bill-form">
+        <input
+          id="add-bill-input"
+          type="text"
+          placeholder="e.g. HB1288"
+          onkeydown="if(event.key==='Enter') addBill()"
+        />
+        <button id="add-bill-btn" onclick="addBill()" class="add-btn">Add</button>
+      </div>
+      <p id="add-error" class="add-error hidden"></p>
     </aside>
 
     <main class="main-content">
@@ -53,6 +70,6 @@
 
   </div>
 
-  <script src="/static/app.js"></script>
+  <script src="/static/admin.js"></script>
 </body>
 </html>

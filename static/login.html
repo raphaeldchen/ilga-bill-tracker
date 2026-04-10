@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Illinois Legislative Tracker</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+      padding: 2rem;
+    }
+    .login-card h2 { margin-bottom: 0.25rem; }
+    .login-card p.subtitle {
+      color: var(--pico-muted-color);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+    .error-msg {
+      color: var(--pico-del-color);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Admin Login</h2>
+    <p class="subtitle">Illinois Legislative Tracker</p>
+
+    <p class="error-msg" id="error-msg">Incorrect password. Please try again.</p>
+
+    <form method="POST" action="/login">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter admin password"
+        autocomplete="current-password"
+        required
+      />
+      <button type="submit">Sign in</button>
+    </form>
+
+    <p style="margin-top:1rem;font-size:0.8rem;">
+      <a href="/">Back to public view</a>
+    </p>
+  </div>
+
+  <script>
+    if (new URLSearchParams(window.location.search).get('error')) {
+      document.getElementById('error-msg').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

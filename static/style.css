@@ -251,3 +251,23 @@ html, body {
   pointer-events: none;
   opacity: 0.7;
 }
+
+/* ── Admin badge ────────────────────────────────────────────── */
+
+.admin-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--pico-primary);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--pico-border-radius);
+  vertical-align: middle;
+}
+
+.logout-btn {
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+}

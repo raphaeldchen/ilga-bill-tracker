@@ -1,0 +1,12 @@
+.venv/
+data/
+.env
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.pytest_cache/
+tests/
+docs/
+tracker.py
+.worktrees/
