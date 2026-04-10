@@ -13,12 +13,19 @@ def get_connection() -> sqlite3.Connection:
 def init_db() -> None:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     with get_connection() as conn:
+        # Migrate existing databases that predate last_fetched_at
+        try:
+            conn.execute("ALTER TABLE bills ADD COLUMN last_fetched_at TEXT")
+        except Exception:
+            pass  # Column already exists
+
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS bills (
-                id        TEXT PRIMARY KEY,
-                title     TEXT,
-                session   TEXT,
-                added_at  TEXT DEFAULT (datetime('now'))
+                id              TEXT PRIMARY KEY,
+                title           TEXT,
+                session         TEXT,
+                added_at        TEXT DEFAULT (datetime('now')),
+                last_fetched_at TEXT
             );
 
             CREATE TABLE IF NOT EXISTS actions (
