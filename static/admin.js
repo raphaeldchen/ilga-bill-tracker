@@ -150,21 +150,27 @@ async function saveNote(billId) {
   const textarea = document.getElementById('note-' + billId);
   if (!textarea) return;
   const note = textarea.value;
+  const btn = textarea.nextElementSibling;
 
-  const res = await fetch('/api/bills/' + billId + '/note', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ note: note }),
-  });
+  if (btn) btn.setAttribute('aria-busy', 'true');
+  try {
+    const res = await fetch('/api/bills/' + encodeURIComponent(billId) + '/note', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note: note }),
+    });
 
-  if (res.status === 401) { window.location.href = '/login'; return; }
+    if (res.status === 401) { window.location.href = '/login'; return; }
 
-  if (res.ok) {
-    const bill = allBills.find(function(b) { return b.id === billId; });
-    if (bill) bill.note = note;
-    showToast('Note saved', 'success');
-  } else {
-    showToast('Failed to save note', 'error');
+    if (res.ok) {
+      const bill = allBills.find(function(b) { return b.id === billId; });
+      if (bill) bill.note = note;
+      showToast('Note saved', 'success');
+    } else {
+      showToast('Failed to save note', 'error');
+    }
+  } finally {
+    if (btn) btn.removeAttribute('aria-busy');
   }
 }
 
