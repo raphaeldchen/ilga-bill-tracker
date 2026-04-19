@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from services.bills import add_bill, get_actions, update_bill_note
+from services.bills import add_bill, get_actions, update_bill_note, get_all_bills
 from tests.conftest import FAKE_BILL
 
 
@@ -240,7 +240,6 @@ def test_update_bill_note_not_found(db):
 def test_list_bills_includes_note(db):
     with db:
         db.execute("INSERT INTO bills (id, title, session, note) VALUES ('HB1288', 'Test', '104th', 'My note')")
-    from services.bills import get_all_bills
     bills = get_all_bills()
     assert bills[0]["note"] == "My note"
 
@@ -248,6 +247,5 @@ def test_list_bills_includes_note(db):
 def test_list_bills_note_defaults_empty(db):
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test', '104th')")
-    from services.bills import get_all_bills
     bills = get_all_bills()
     assert bills[0]["note"] == ""
