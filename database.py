@@ -19,13 +19,20 @@ def init_db() -> None:
         except Exception:
             pass  # Column already exists
 
+        # Migrate existing databases that predate note
+        try:
+            conn.execute("ALTER TABLE bills ADD COLUMN note TEXT NOT NULL DEFAULT ''")
+        except Exception:
+            pass  # Column already exists
+
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS bills (
                 id              TEXT PRIMARY KEY,
                 title           TEXT,
                 session         TEXT,
                 added_at        TEXT DEFAULT (datetime('now')),
-                last_fetched_at TEXT
+                last_fetched_at TEXT,
+                note            TEXT NOT NULL DEFAULT ''
             );
 
             CREATE TABLE IF NOT EXISTS actions (

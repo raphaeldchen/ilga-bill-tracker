@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from services.bills import add_bill, get_actions
+from services.bills import add_bill, get_actions, update_bill_note
 from tests.conftest import FAKE_BILL
 
 
@@ -219,3 +219,35 @@ async def test_fetch_all_cached_returns_skipped_message(db):
 
     mock_fetch.assert_not_called()
     assert "skipped" in result
+
+
+# ── update_bill_note ──────────────────────────────────────────────────────────
+
+def test_update_bill_note(db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test', '104th')")
+    result = update_bill_note("HB1288", "This is a note")
+    assert result is True
+    row = db.execute("SELECT note FROM bills WHERE id = 'HB1288'").fetchone()
+    assert row["note"] == "This is a note"
+
+
+def test_update_bill_note_not_found(db):
+    result = update_bill_note("HB9999", "note")
+    assert result is False
+
+
+def test_list_bills_includes_note(db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session, note) VALUES ('HB1288', 'Test', '104th', 'My note')")
+    from services.bills import get_all_bills
+    bills = get_all_bills()
+    assert bills[0]["note"] == "My note"
+
+
+def test_list_bills_note_defaults_empty(db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test', '104th')")
+    from services.bills import get_all_bills
+    bills = get_all_bills()
+    assert bills[0]["note"] == ""

@@ -9,7 +9,7 @@ CACHE_HOURS = 12
 def get_all_bills() -> list[dict]:
     with get_connection() as conn:
         rows = conn.execute(
-            "SELECT id, title, session, added_at FROM bills ORDER BY id"
+            "SELECT id, title, session, added_at, note FROM bills ORDER BY id"
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -24,6 +24,14 @@ def bill_exists(bill_id: str) -> bool:
 def remove_bill(bill_id: str) -> bool:
     with get_connection() as conn:
         cur = conn.execute("DELETE FROM bills WHERE id = ?", (bill_id,))
+        return cur.rowcount > 0
+
+
+def update_bill_note(bill_id: str, note: str) -> bool:
+    with get_connection() as conn:
+        cur = conn.execute(
+            "UPDATE bills SET note = ? WHERE id = ?", (note, bill_id)
+        )
         return cur.rowcount > 0
 
 
