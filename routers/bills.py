@@ -11,6 +11,10 @@ class AddBillRequest(BaseModel):
     bill_id: str
 
 
+class UpdateNoteRequest(BaseModel):
+    note: str
+
+
 @router.get("")
 def list_bills() -> list[dict]:
     return get_all_bills()
@@ -33,10 +37,6 @@ async def create_bill(body: AddBillRequest) -> dict:
 def delete_bill(bill_id: str) -> None:
     if not remove_bill(normalize_bill_id(bill_id)):
         raise HTTPException(status_code=404, detail=f"{bill_id} not found")
-
-
-class UpdateNoteRequest(BaseModel):
-    note: str
 
 
 @router.put("/{bill_id}/note", dependencies=[Depends(require_admin)])

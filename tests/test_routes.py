@@ -196,6 +196,7 @@ def test_update_note_requires_auth(client):
 
 
 def test_list_bills_includes_note_field(client, db):
+    # also verifies GET /api/bills returns note field (note column added in migration)
     with db:
         db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test Bill', '104th')")
     res = client.get("/api/bills")
