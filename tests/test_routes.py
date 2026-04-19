@@ -162,3 +162,43 @@ def test_export_actions(client, db):
     assert len(data) == 2
     bill_ids = {a["bill_id"] for a in data}
     assert bill_ids == {"HB1288", "SB0019"}
+
+
+# ── PUT /api/bills/{bill_id}/note ────────────────────────────────────────────
+
+def test_update_note_success(auth_client, db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test Bill', '104th')")
+    res = auth_client.put("/api/bills/HB1288/note", json={"note": "Important bill"})
+    assert res.status_code == 200
+    assert res.json() == {"bill_id": "HB1288", "note": "Important bill"}
+    row = db.execute("SELECT note FROM bills WHERE id = 'HB1288'").fetchone()
+    assert row["note"] == "Important bill"
+
+
+def test_update_note_clears_note(auth_client, db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session, note) VALUES ('HB1288', 'Test', '104th', 'old note')")
+    res = auth_client.put("/api/bills/HB1288/note", json={"note": ""})
+    assert res.status_code == 200
+    row = db.execute("SELECT note FROM bills WHERE id = 'HB1288'").fetchone()
+    assert row["note"] == ""
+
+
+def test_update_note_not_found_returns_404(auth_client):
+    res = auth_client.put("/api/bills/HB9999/note", json={"note": "test"})
+    assert res.status_code == 404
+
+
+def test_update_note_requires_auth(client):
+    res = client.put("/api/bills/HB1288/note", json={"note": "test"})
+    assert res.status_code == 401
+
+
+def test_list_bills_includes_note_field(client, db):
+    with db:
+        db.execute("INSERT INTO bills (id, title, session) VALUES ('HB1288', 'Test Bill', '104th')")
+    res = client.get("/api/bills")
+    assert res.status_code == 200
+    assert "note" in res.json()[0]
+    assert res.json()[0]["note"] == ""

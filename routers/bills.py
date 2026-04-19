@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from services.bills import get_all_bills, bill_exists, remove_bill, add_bill
+from services.bills import get_all_bills, bill_exists, remove_bill, add_bill, update_bill_note
 from services.openstates import normalize_bill_id
 from routers.auth import require_admin
 
@@ -33,3 +33,15 @@ async def create_bill(body: AddBillRequest) -> dict:
 def delete_bill(bill_id: str) -> None:
     if not remove_bill(normalize_bill_id(bill_id)):
         raise HTTPException(status_code=404, detail=f"{bill_id} not found")
+
+
+class UpdateNoteRequest(BaseModel):
+    note: str
+
+
+@router.put("/{bill_id}/note", dependencies=[Depends(require_admin)])
+def update_note(bill_id: str, body: UpdateNoteRequest) -> dict:
+    normalized = normalize_bill_id(bill_id)
+    if not update_bill_note(normalized, body.note):
+        raise HTTPException(status_code=404, detail=f"{bill_id} not found")
+    return {"bill_id": normalized, "note": body.note}
