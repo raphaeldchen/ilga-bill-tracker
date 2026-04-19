@@ -147,6 +147,8 @@ function toggleExpand(billId) {
 }
 
 async function saveNote(billId) {
+  // billId here is the HTML-escaped safeId from the onclick attribute.
+  // For IL bill IDs (alphanumeric only, e.g. HB1288), escapeHtml is a no-op so this is safe.
   const textarea = document.getElementById('note-' + billId);
   if (!textarea) return;
   const note = textarea.value;
