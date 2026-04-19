@@ -1,7 +1,9 @@
 let allActions = [];
+let allBills = [];
+let collapsedView = true;
 
-document.addEventListener('DOMContentLoaded', function() {
-  loadBills();
+document.addEventListener('DOMContentLoaded', async function() {
+  await loadBills();
   loadActions();
 
   document.getElementById('bill-list').addEventListener('click', function(e) {
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadBills() {
   const bills = await apiFetch('/api/bills');
   if (bills === null) return;
+  allBills = bills;
   renderBills(bills);
 }
 
@@ -48,12 +51,25 @@ function renderBills(bills) {
   if (current) filter.value = current;
 }
 
+function latestActionPerBill(actions) {
+  const seen = new Set();
+  return actions.filter(function(a) {
+    if (seen.has(a.bill_id)) return false;
+    seen.add(a.bill_id);
+    return true;
+  });
+}
+
 function renderActions() {
+  document.querySelectorAll('tr.expanded-row').forEach(function(r) { r.remove(); });
+
   const filterId = document.getElementById('bill-filter').value;
-  const rows = filterId ? allActions.filter(function(a) { return a.bill_id === filterId; }) : allActions;
+  let rows = filterId ? allActions.filter(function(a) { return a.bill_id === filterId; }) : allActions;
+
+  if (collapsedView && !filterId) rows = latestActionPerBill(rows);
 
   document.getElementById('action-count').textContent =
-    rows.length + ' action' + (rows.length !== 1 ? 's' : '');
+    rows.length + (collapsedView && !filterId ? ' bill' : ' action') + (rows.length !== 1 ? 's' : '');
 
   const tbody = document.getElementById('actions-tbody');
   if (rows.length === 0) {
@@ -61,9 +77,14 @@ function renderActions() {
     return;
   }
 
+  const clickable = collapsedView && !filterId;
   tbody.innerHTML = rows.map(function(a) {
-    return '<tr>' +
-      '<td>' + escapeHtml(a.bill_id) + '</td>' +
+    var billId = escapeHtml(a.bill_id);
+    var rowAttrs = clickable
+      ? ' class="bill-row" data-bill-id="' + billId + '" onclick="toggleExpand(\'' + billId + '\')"'
+      : '';
+    return '<tr' + rowAttrs + '>' +
+      '<td>' + billId + '</td>' +
       '<td>' + escapeHtml(a.date) + '</td>' +
       '<td>' + escapeHtml(a.chamber) + '</td>' +
       '<td>' + escapeHtml(a.description) + '</td>' +
@@ -73,6 +94,78 @@ function renderActions() {
 
 function applyFilter() {
   renderActions();
+}
+
+function toggleExpand(billId) {
+  const existing = document.querySelector('tr.expanded-row[data-expanded-for="' + billId + '"]');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  document.querySelectorAll('tr.expanded-row').forEach(function(r) { r.remove(); });
+
+  const billRow = document.querySelector('tr.bill-row[data-bill-id="' + billId + '"]');
+  if (!billRow) return;
+
+  const bill = allBills.find(function(b) { return b.id === billId; });
+  // allActions is newest-first; reverse for oldest-first chronological display
+  const billActions = allActions
+    .filter(function(a) { return a.bill_id === billId; })
+    .slice()
+    .reverse();
+
+  var historyRows = billActions.length
+    ? billActions.map(function(a) {
+        return '<tr>' +
+          '<td>' + escapeHtml(a.date) + '</td>' +
+          '<td>' + escapeHtml(a.chamber) + '</td>' +
+          '<td>' + escapeHtml(a.description) + '</td>' +
+          '</tr>';
+      }).join('')
+    : '<tr><td colspan="3" class="empty-state">No actions.</td></tr>';
+
+  var currentNote = bill ? (bill.note || '') : '';
+  var safeId = escapeHtml(billId);
+  var noteHtml = '<div class="expanded-notes">' +
+    '<h6>Notes</h6>' +
+    '<textarea id="note-' + safeId + '">' + escapeHtml(currentNote) + '</textarea>' +
+    '<button class="save-note-btn" onclick="saveNote(\'' + safeId + '\')">Save</button>' +
+    '</div>';
+
+  var expandedRow = document.createElement('tr');
+  expandedRow.className = 'expanded-row';
+  expandedRow.setAttribute('data-expanded-for', billId);
+  expandedRow.innerHTML = '<td colspan="4"><div class="expanded-content">' +
+    '<div class="expanded-history"><h6>Action History</h6>' +
+    '<table><thead><tr><th>Date</th><th>Chamber</th><th>Action</th></tr></thead>' +
+    '<tbody>' + historyRows + '</tbody></table></div>' +
+    noteHtml +
+    '</div></td>';
+
+  billRow.insertAdjacentElement('afterend', expandedRow);
+}
+
+async function saveNote(billId) {
+  const textarea = document.getElementById('note-' + billId);
+  if (!textarea) return;
+  const note = textarea.value;
+
+  const res = await fetch('/api/bills/' + billId + '/note', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ note: note }),
+  });
+
+  if (res.status === 401) { window.location.href = '/login'; return; }
+
+  if (res.ok) {
+    const bill = allBills.find(function(b) { return b.id === billId; });
+    if (bill) bill.note = note;
+    showToast('Note saved', 'success');
+  } else {
+    showToast('Failed to save note', 'error');
+  }
 }
 
 async function addBill() {
