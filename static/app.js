@@ -1,4 +1,5 @@
 let allActions = [];
+let allBills = [];
 let collapsedView = true;  // show one row per bill by default
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadBills() {
   const bills = await apiFetch('/api/bills');
   if (bills === null) return;
+  allBills = bills;
   renderBills(bills);
 }
 
@@ -51,6 +53,8 @@ function latestActionPerBill(actions) {
 }
 
 function renderActions() {
+  document.querySelectorAll('tr.expanded-row').forEach(function(r) { r.remove(); });
+
   const filterId = document.getElementById('bill-filter').value;
   let rows = filterId ? allActions.filter(function(a) { return a.bill_id === filterId; }) : allActions;
 
@@ -65,9 +69,14 @@ function renderActions() {
     return;
   }
 
+  const clickable = collapsedView && !filterId;
   tbody.innerHTML = rows.map(function(a) {
-    return '<tr>' +
-      '<td>' + escapeHtml(a.bill_id) + '</td>' +
+    var billId = escapeHtml(a.bill_id);
+    var rowAttrs = clickable
+      ? ' class="bill-row" data-bill-id="' + billId + '" onclick="toggleExpand(\'' + billId + '\')"'
+      : '';
+    return '<tr' + rowAttrs + '>' +
+      '<td>' + billId + '</td>' +
       '<td>' + escapeHtml(a.date) + '</td>' +
       '<td>' + escapeHtml(a.chamber) + '</td>' +
       '<td>' + escapeHtml(a.description) + '</td>' +
@@ -77,6 +86,55 @@ function renderActions() {
 
 function applyFilter() {
   renderActions();
+}
+
+function toggleExpand(billId) {
+  const existing = document.querySelector('tr.expanded-row[data-expanded-for="' + billId + '"]');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  document.querySelectorAll('tr.expanded-row').forEach(function(r) { r.remove(); });
+
+  const billRow = document.querySelector('tr.bill-row[data-bill-id="' + billId + '"]');
+  if (!billRow) return;
+
+  const bill = allBills.find(function(b) { return b.id === billId; });
+  const billActions = allActions
+    .filter(function(a) { return a.bill_id === billId; })
+    .slice()
+    .reverse();
+
+  var historyRows = billActions.length
+    ? billActions.map(function(a) {
+        return '<tr>' +
+          '<td>' + escapeHtml(a.date) + '</td>' +
+          '<td>' + escapeHtml(a.chamber) + '</td>' +
+          '<td>' + escapeHtml(a.description) + '</td>' +
+          '</tr>';
+      }).join('')
+    : '<tr><td colspan="3" class="empty-state">No actions.</td></tr>';
+
+  var noteHtml = '';
+  if (bill && bill.note) {
+    noteHtml = '<div class="expanded-notes">' +
+      '<h6>Notes</h6>' +
+      '<p class="note-text">' + escapeHtml(bill.note) + '</p>' +
+      '</div>';
+  }
+
+  var expandedRow = document.createElement('tr');
+  expandedRow.className = 'expanded-row';
+  expandedRow.setAttribute('data-expanded-for', billId);
+  expandedRow.innerHTML = '<td colspan="4"><div class="expanded-content">' +
+    '<div class="expanded-history"><h6>Action History</h6>' +
+    '<table><thead><tr><th>Date</th><th>Chamber</th><th>Action</th></tr></thead>' +
+    '<tbody>' + historyRows + '</tbody></table></div>' +
+    noteHtml +
+    '</div></td>';
+
+  billRow.insertAdjacentElement('afterend', expandedRow);
 }
 
 async function apiFetch(url) {
