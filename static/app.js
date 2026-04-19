@@ -1,4 +1,5 @@
 let allActions = [];
+let collapsedView = true;  // show one row per bill by default
 
 document.addEventListener('DOMContentLoaded', function() {
   loadBills();
@@ -40,12 +41,23 @@ function renderBills(bills) {
   if (current) filter.value = current;
 }
 
+function latestActionPerBill(actions) {
+  const seen = new Set();
+  return actions.filter(function(a) {
+    if (seen.has(a.bill_id)) return false;
+    seen.add(a.bill_id);
+    return true;
+  });
+}
+
 function renderActions() {
   const filterId = document.getElementById('bill-filter').value;
-  const rows = filterId ? allActions.filter(function(a) { return a.bill_id === filterId; }) : allActions;
+  let rows = filterId ? allActions.filter(function(a) { return a.bill_id === filterId; }) : allActions;
+
+  if (collapsedView && !filterId) rows = latestActionPerBill(rows);
 
   document.getElementById('action-count').textContent =
-    rows.length + ' action' + (rows.length !== 1 ? 's' : '');
+    rows.length + (collapsedView && !filterId ? ' bill' : ' action') + (rows.length !== 1 ? 's' : '');
 
   const tbody = document.getElementById('actions-tbody');
   if (rows.length === 0) {
