@@ -2,8 +2,8 @@ let allActions = [];
 let allBills = [];
 let collapsedView = true;  // show one row per bill by default
 
-document.addEventListener('DOMContentLoaded', function() {
-  loadBills();
+document.addEventListener('DOMContentLoaded', async function() {
+  await loadBills();
   loadActions();
 });
 
@@ -101,6 +101,7 @@ function toggleExpand(billId) {
   if (!billRow) return;
 
   const bill = allBills.find(function(b) { return b.id === billId; });
+  // allActions is newest-first; reverse for oldest-first chronological display
   const billActions = allActions
     .filter(function(a) { return a.bill_id === billId; })
     .slice()
