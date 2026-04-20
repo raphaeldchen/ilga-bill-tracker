@@ -78,7 +78,7 @@ function renderActions() {
     return '<tr' + rowAttrs + '>' +
       '<td>' + billId + '</td>' +
       '<td>' + escapeHtml(a.date) + '</td>' +
-      '<td>' + escapeHtml(a.chamber) + '</td>' +
+      '<td>' + chamberBadge(a.chamber) + '</td>' +
       '<td>' + escapeHtml(a.description) + '</td>' +
       '</tr>';
   }).join('');
@@ -111,7 +111,7 @@ function toggleExpand(billId) {
     ? billActions.map(function(a) {
         return '<tr>' +
           '<td>' + escapeHtml(a.date) + '</td>' +
-          '<td>' + escapeHtml(a.chamber) + '</td>' +
+          '<td>' + chamberBadge(a.chamber) + '</td>' +
           '<td>' + escapeHtml(a.description) + '</td>' +
           '</tr>';
       }).join('')
@@ -162,6 +162,10 @@ function showToast(message, type) {
 function parseDate(str) {
   if (!str) return 0;
   return new Date(str).getTime() || 0;
+}
+
+function chamberBadge(chamber) {
+  return '<span class="chamber-badge">' + escapeHtml(chamber) + '</span>';
 }
 
 function escapeHtml(str) {

@@ -201,7 +201,9 @@ html, body {
 }
 
 .action-count {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
   color: var(--pico-muted-color);
 }
 
@@ -217,36 +219,42 @@ html, body {
   overflow-y: auto;
   border: 1px solid var(--pico-muted-border-color);
   border-radius: var(--pico-border-radius);
+  background: #ffffff;
 }
 
 .table-wrap table {
   margin: 0;
   border-collapse: collapse;
   width: 100%;
+  background: #ffffff;
 }
 
 .table-wrap thead th {
   position: sticky;
   top: 0;
-  background: var(--pico-background-color);
+  background: #ffffff;
   border-bottom: 2px solid var(--pico-muted-border-color);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  color: var(--pico-primary);
   z-index: 1;
 }
 
 .table-wrap td, .table-wrap th {
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.75rem;
   font-size: 0.875rem;
   vertical-align: top;
+  border-bottom: 1px solid var(--pico-muted-border-color);
 }
 
 /* Bill ID column */
 .table-wrap td:first-child {
   white-space: nowrap;
   font-family: var(--pico-font-family-monospace);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: var(--pico-primary);
 }
 
@@ -255,12 +263,35 @@ html, body {
   white-space: nowrap;
   color: var(--pico-muted-color);
   font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Chamber column */
 .table-wrap td:nth-child(3) {
   white-space: nowrap;
   font-size: 0.8rem;
+}
+
+.chamber-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pico-primary);
+  border: 1px solid var(--pico-primary);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+tr.bill-row td:first-child::after {
+  content: ' →';
+  color: var(--pico-muted-color);
+  font-family: var(--pico-font-family);
+  font-weight: 400;
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
 }
 
 .empty-state {
