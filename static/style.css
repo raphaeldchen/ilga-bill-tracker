@@ -3,7 +3,7 @@
 :root {
   --pico-background-color: #faf9f7;
   --pico-color: #1a1a1a;
-  --pico-muted-color: #6b6560;
+  --pico-muted-color: #5c5753;
   --pico-muted-border-color: #e0ddd8;
   --pico-primary: #003366;
   --pico-primary-hover: #00254d;
@@ -165,7 +165,8 @@ html, body {
 
 .add-bill-form input:focus {
   border-bottom-color: var(--pico-primary);
-  outline: none;
+  outline: 2px solid var(--pico-primary);
+  outline-offset: 2px;
   box-shadow: none;
 }
 
@@ -493,7 +494,8 @@ tr.expanded-row > td {
 
 .login-card input[type="password"]:focus {
   border-bottom-color: var(--pico-primary);
-  outline: none;
+  outline: 2px solid var(--pico-primary);
+  outline-offset: 2px;
   box-shadow: none;
 }
 
