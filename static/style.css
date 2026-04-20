@@ -86,6 +86,7 @@ html, body {
 
 .sidebar {
   border-right: 1px solid var(--pico-muted-border-color);
+  background: #ffffff;
   padding: 1.25rem 1rem;
   overflow-y: auto;
   display: flex;
@@ -95,9 +96,11 @@ html, body {
 
 .sidebar h6 {
   margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--pico-muted-color);
 }
 
@@ -112,14 +115,16 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.3rem 0.4rem;
-  border-radius: var(--pico-border-radius);
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid transparent;
   font-size: 0.875rem;
   cursor: default;
+  transition: border-color 0.12s;
 }
 
 .bill-list li:hover {
-  background: var(--pico-secondary-background);
+  background: none;
+  border-left-color: var(--pico-primary);
 }
 
 .remove-btn {
@@ -132,6 +137,7 @@ html, body {
   padding: 0 0.2rem;
   margin: 0;
   width: auto;
+  transition: color 0.12s;
 }
 
 .remove-btn:hover {
@@ -142,20 +148,33 @@ html, body {
   display: flex;
   gap: 0.4rem;
   margin-top: 0.5rem;
+  align-items: flex-end;
 }
 
 .add-bill-form input {
   margin: 0;
   font-size: 0.85rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.3rem 0;
   min-width: 0;
+  border: none;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.add-bill-form input:focus {
+  border-bottom-color: var(--pico-primary);
+  outline: none;
+  box-shadow: none;
 }
 
 .add-btn {
   margin: 0;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
   white-space: nowrap;
+  border-radius: 2px;
 }
 
 .add-error {
