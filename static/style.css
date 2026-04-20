@@ -245,6 +245,13 @@ html, body {
   display: none;
 }
 
+/* ── Button hover text color ─────────────────────────────────── */
+
+button:hover:not(.remove-btn),
+[role="button"]:hover {
+  color: #fff !important;
+}
+
 /* ── Fetch button busy state ─────────────────────────────────── */
 
 #fetch-btn[aria-busy="true"] {
@@ -311,14 +318,16 @@ tr.expanded-row > td {
 
 .expanded-history table {
   width: 100%;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  font-family: var(--pico-font-family);
   margin: 0;
   border-collapse: collapse;
 }
 
 .expanded-history td,
 .expanded-history th {
-  padding: 0.25rem 0.5rem;
+  padding: 0.12rem 0.4rem;
+  line-height: 1.4;
 }
 
 .note-text {
