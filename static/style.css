@@ -1,3 +1,20 @@
+/* ── Design tokens (PicoCSS overrides) ───────────────────────── */
+
+:root {
+  --pico-background-color: #faf9f7;
+  --pico-color: #1a1a1a;
+  --pico-muted-color: #6b6560;
+  --pico-muted-border-color: #e0ddd8;
+  --pico-primary: #003366;
+  --pico-primary-hover: #00254d;
+  --pico-primary-focus: rgba(0, 51, 102, 0.25);
+  --pico-secondary-background: #f0ede8;
+  --pico-del-color: #9b2335;
+  --pico-font-family: 'Inter', system-ui, sans-serif;
+  --pico-border-radius: 3px;
+  --font-display: 'Playfair Display', Georgia, serif;
+}
+
 /* ── Layout ──────────────────────────────────────────────────── */
 
 html, body {
