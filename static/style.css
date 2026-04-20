@@ -448,3 +448,70 @@ tr.expanded-row > td {
   font-size: 0.82rem;
   border-radius: 2px;
 }
+
+/* ── Login page ──────────────────────────────────────────────── */
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  border-top: 3px solid var(--pico-primary);
+  padding: 2.5rem 2rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+}
+
+.login-masthead {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0 0 0.25rem;
+  color: var(--pico-color);
+}
+
+.login-subtitle {
+  color: var(--pico-muted-color);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.login-card input[type="password"] {
+  border: none;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.4rem 0;
+  box-shadow: none;
+}
+
+.login-card input[type="password"]:focus {
+  border-bottom-color: var(--pico-primary);
+  outline: none;
+  box-shadow: none;
+}
+
+.login-card button[type="submit"] {
+  width: 100%;
+  font-weight: 500;
+  border-radius: 2px;
+}
+
+.login-error {
+  color: var(--pico-del-color);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.login-back {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.8rem;
+}
