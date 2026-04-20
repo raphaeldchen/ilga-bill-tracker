@@ -8,6 +8,11 @@
   --pico-primary: #003366;
   --pico-primary-hover: #00254d;
   --pico-primary-focus: rgba(0, 51, 102, 0.25);
+  --pico-primary-background: #003366;
+  --pico-primary-border: #003366;
+  --pico-primary-hover-background: #00254d;
+  --pico-primary-hover-border: #00254d;
+  --pico-primary-inverse: #ffffff;
   --pico-secondary-background: #f0ede8;
   --pico-del-color: #9b2335;
   --pico-font-family: 'Inter', system-ui, sans-serif;
