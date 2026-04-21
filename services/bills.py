@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime, timezone, timedelta
 from database import get_connection
-from services.openstates import fetch_bills, extract_chamber, RateLimitError
+from services.openstates import fetch_bills, extract_chamber, RateLimitError, DailyQuotaError
 
 CACHE_HOURS = 12
 
@@ -99,7 +99,15 @@ async def fetch_all_updates() -> dict:
     new_actions = 0
     errors = []
 
-    # If every result is a rate limit error, raise once rather than listing 20 failures.
+    # Daily quota hit: raise immediately (no point processing partial data as "errors")
+    quota_hits = [r for r in results if isinstance(r[1], DailyQuotaError)]
+    if quota_hits:
+        fetched = len(results) - len(quota_hits)
+        raise DailyQuotaError(
+            f"{str(quota_hits[0][1])} ({fetched} of {len(bill_ids)} bills fetched before quota was hit)"
+        )
+
+    # If every result is a transient rate limit error, raise once.
     rate_limited = [r for r in results if isinstance(r[1], RateLimitError)]
     if len(rate_limited) == len(results):
         raise RateLimitError(str(rate_limited[0][1]))
