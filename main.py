@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from database import init_db
@@ -13,6 +13,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Illinois Legislative Tracker", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def no_cache_static(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
 
 app.include_router(auth.router)
 app.include_router(bills.router)
