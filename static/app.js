@@ -81,10 +81,13 @@ function renderBills(bills) {
     var title = b.title ? escapeHtml(b.title) : '';
     var latest = allActions.find(function(a) { return a.bill_id === b.id; });
     var meta  = latest ? 'Latest: ' + formatDate(latest.date) : '';
+    var srcLink = b.source_url
+      ? '<a class="bill-source-link" href="' + escapeHtml(b.source_url) + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="View on ILGA">' + extLinkSvg() + '</a>'
+      : '';
     return '<li>' +
       '<button class="bill-item' + (b.id === activeFilter ? ' active' : '') + '" ' +
         'data-bill-id="' + id + '" onclick="setFilter(\'' + id + '\')">' +
-        '<div class="bill-item-id">' + id + '</div>' +
+        '<div class="bill-item-id">' + id + srcLink + '</div>' +
         (title ? '<div class="bill-item-title">' + title + '</div>' : '') +
         (meta   ? '<div class="bill-item-meta">' + meta + '</div>' : '') +
       '</button>' +
@@ -149,9 +152,13 @@ function renderActions() {
 
   tbody.innerHTML = rows.map(function(a) {
     var id = escapeHtml(a.bill_id);
+    var url = billUrl(a.bill_id);
+    var billCell = url
+      ? '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="View on ILGA">' + id + '</a>'
+      : id;
     var rowClass = collapsed ? ' class="bill-row" data-bill-id="' + id + '" onclick="toggleExpand(\'' + id + '\')"' : ' class="action-row"';
     return '<tr' + rowClass + '>' +
-      '<td class="cell-bill">' + id + '</td>' +
+      '<td class="cell-bill">' + billCell + '</td>' +
       '<td class="cell-date">' + formatDate(a.date) + '</td>' +
       '<td class="cell-chamber">' + chamberBadge(a.chamber) + '</td>' +
       '<td class="cell-action">' + escapeHtml(a.description) + '</td>' +
@@ -196,6 +203,11 @@ function toggleExpand(billId) {
     '</div>';
   }
 
+  var url = billUrl(billId);
+  var srcLink = url
+    ? ' <a class="bill-source-link" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer" title="View on ILGA">' + extLinkSvg() + '</a>'
+    : '';
+
   var expandedRow = document.createElement('tr');
   expandedRow.className = 'expanded-row';
   expandedRow.dataset.expandedFor = billId;
@@ -205,7 +217,7 @@ function toggleExpand(billId) {
         '<div class="expanded-inner-wrap">' +
           '<div class="expanded-content">' +
             '<div class="expanded-history">' +
-              '<p class="expanded-section-label">Full History — ' + escapeHtml(billId) + '</p>' +
+              '<p class="expanded-section-label">Full History — ' + escapeHtml(billId) + srcLink + '</p>' +
               '<table><thead><tr><th>Date</th><th>Ch.</th><th>Action</th></tr></thead>' +
               '<tbody>' + histRows + '</tbody></table>' +
             '</div>' +
@@ -268,6 +280,15 @@ function chamberBadge(chamber) {
   var c = String(chamber).toLowerCase();
   var key = (c.startsWith('h') || c.startsWith('l')) ? 'H' : 'S';
   return '<span class="chamber ch-' + key + '">' + key + '</span>';
+}
+
+function billUrl(billId) {
+  var bill = allBills.find(function(b) { return b.id === billId; });
+  return (bill && bill.source_url) ? bill.source_url : '';
+}
+
+function extLinkSvg() {
+  return '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 2H2v6h6V5.5"/><polyline points="6 2 8 2 8 4"/><line x1="4.5" y1="5.5" x2="8" y2="2"/></svg>';
 }
 
 function escapeHtml(str) {

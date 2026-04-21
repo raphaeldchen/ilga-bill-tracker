@@ -9,7 +9,7 @@ CACHE_HOURS = 12
 def get_all_bills() -> list[dict]:
     with get_connection() as conn:
         rows = conn.execute(
-            "SELECT id, title, session, added_at, note FROM bills ORDER BY id"
+            "SELECT id, title, session, added_at, note, source_url FROM bills ORDER BY id"
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -63,11 +63,13 @@ async def add_bill(bill_id: str) -> dict:
 
     title = data.get("title", "")
     session = data.get("session", "")
+    sources = data.get("sources", [])
+    source_url = sources[0].get("url", "") if sources else ""
 
     with get_connection() as conn:
         conn.execute(
-            "INSERT OR IGNORE INTO bills (id, title, session) VALUES (?, ?, ?)",
-            (bill_id, title, session),
+            "INSERT OR IGNORE INTO bills (id, title, session, source_url) VALUES (?, ?, ?, ?)",
+            (bill_id, title, session, source_url),
         )
         _upsert_actions(conn, bill_id, data.get("actions", []))
 
@@ -118,9 +120,11 @@ async def fetch_all_updates() -> dict:
             if isinstance(data, Exception):
                 errors.append({"bill_id": bill_id, "error": str(data)})
                 continue
+            sources = data.get("sources", [])
+            source_url = sources[0].get("url", "") if sources else ""
             conn.execute(
-                "UPDATE bills SET title = ?, session = ?, last_fetched_at = ? WHERE id = ?",
-                (data.get("title", ""), data.get("session", ""), now_str, bill_id),
+                "UPDATE bills SET title = ?, session = ?, last_fetched_at = ?, source_url = ? WHERE id = ?",
+                (data.get("title", ""), data.get("session", ""), now_str, source_url, bill_id),
             )
             new_actions += _upsert_actions(conn, bill_id, data.get("actions", []))
 

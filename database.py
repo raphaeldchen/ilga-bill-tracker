@@ -25,6 +25,12 @@ def init_db() -> None:
         except Exception:
             pass  # Column already exists
 
+        # Migrate existing databases that predate source_url
+        try:
+            conn.execute("ALTER TABLE bills ADD COLUMN source_url TEXT NOT NULL DEFAULT ''")
+        except Exception:
+            pass  # Column already exists
+
         conn.executescript("""
             CREATE TABLE IF NOT EXISTS bills (
                 id              TEXT PRIMARY KEY,
@@ -32,7 +38,8 @@ def init_db() -> None:
                 session         TEXT,
                 added_at        TEXT DEFAULT (datetime('now')),
                 last_fetched_at TEXT,
-                note            TEXT NOT NULL DEFAULT ''
+                note            TEXT NOT NULL DEFAULT '',
+                source_url      TEXT NOT NULL DEFAULT ''
             );
 
             CREATE TABLE IF NOT EXISTS actions (
