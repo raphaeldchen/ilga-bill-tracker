@@ -4,51 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Illinois Legislative Tracker</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/style.css" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body>
 
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="header-title">
-        <strong>Illinois Legislative Tracker</strong>
+  <div id="toast" class="toast hidden"></div>
+
+  <header class="masthead">
+    <div class="masthead-rule"></div>
+    <div class="masthead-top">
+      <h1 class="masthead-title">Illinois Legislative Tracker</h1>
+      <div class="masthead-controls">
+        <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+        <a href="/admin" class="text-btn">Admin</a>
+      </div>
+    </div>
+    <div class="masthead-sub">
+      <div class="masthead-meta">
+        <span>104th General Assembly</span>
+        <span class="sep">·</span>
+        <span id="meta-date"></span>
+        <span class="sep">·</span>
+        <span id="meta-count">—</span>
       </div>
     </div>
   </header>
 
-  <div id="toast" class="toast hidden"></div>
-
   <div class="app-body">
 
     <aside class="sidebar">
-      <h6>Tracked Bills</h6>
+      <div class="sidebar-header">
+        <p class="sidebar-label">Tracked Bills</p>
+      </div>
+      <button class="bill-all-btn active" id="all-bills-btn" onclick="setFilter('')">All Bills</button>
       <ul id="bill-list" class="bill-list"></ul>
     </aside>
 
     <main class="main-content">
-      <div class="table-toolbar">
-        <span id="action-count" class="action-count"></span>
-        <select id="bill-filter" onchange="applyFilter()">
-          <option value="">All Bills</option>
-        </select>
+      <div class="content-header">
+        <span class="content-title" id="content-title">All Activity</span>
+        <span class="content-count" id="action-count"></span>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>Bill</th>
               <th>Date</th>
-              <th>Chamber</th>
+              <th>Ch.</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="actions-tbody">
-            <tr><td colspan="4" class="empty-state">Loading...</td></tr>
+            <tr><td colspan="4" class="empty-state">Loading…</td></tr>
           </tbody>
         </table>
       </div>

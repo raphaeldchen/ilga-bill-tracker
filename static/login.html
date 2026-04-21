@@ -3,36 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login - Illinois Legislative Tracker</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <title>Admin Login — Illinois Legislative Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/style.css" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body class="login-page">
-  <div class="login-card">
-    <p class="login-masthead">Illinois Legislative Tracker</p>
-    <p class="login-subtitle">Admin Login</p>
 
-    <p class="login-error" id="error-msg">Incorrect password. Please try again.</p>
+  <div class="login-wrap">
+    <div class="login-masthead">
+      <div class="login-masthead-rule"></div>
+      <p class="login-title">Illinois Legislative Tracker</p>
+      <p class="login-subtitle">Admin Access</p>
+    </div>
 
-    <form method="POST" action="/login">
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter admin password"
-        autocomplete="current-password"
-        required
-      />
-      <button type="submit">Sign in</button>
-    </form>
+    <div class="login-form">
+      <p class="login-error" id="error-msg">Incorrect password. Please try again.</p>
 
-    <p class="login-back">
-      <a href="/">Back to public view</a>
-    </p>
+      <form method="POST" action="/login">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+          required
+          autofocus
+        />
+        <button type="submit">Sign in</button>
+      </form>
+    </div>
+
+    <p class="login-back"><a href="/">Back to public view</a></p>
   </div>
 
   <script>
