@@ -81,7 +81,7 @@ async def _fetch_one(
         "jurisdiction": IL_JURISDICTION,
         "identifier": to_openstates_identifier(bill_id),
         "session": IL_SESSION,
-        "include": "actions",
+        "include": ["actions", "sources"],
         "per_page": 1,
     }
 
