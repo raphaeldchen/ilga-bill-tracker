@@ -18,21 +18,15 @@ import csv
 import re
 import asyncio
 import argparse
-import sqlite3
 from pathlib import Path
 
-# Allow running as `python -m scripts.migrate` from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from database import init_db, get_connection
+from database import create_pool, close_pool, init_db, get_pool
 from services.openstates import normalize_bill_id, fetch_bills, extract_chamber
 
 
 def parse_bill_id_from_url(url: str) -> str | None:
-    """
-    Extract bill ID from an ILGA URL.
-    'DocTypeID=HB&DocNum=1288' -> 'HB1288'
-    """
     doc_type = re.search(r"DocTypeID=([A-Za-z]+)", url)
     doc_num = re.search(r"DocNum=(\d+)", url)
     if doc_type and doc_num:
@@ -44,93 +38,65 @@ async def seed_from_openstates(bill_ids: list[str]) -> None:
     print(f"\nFetching {len(bill_ids)} bills from OpenStates...")
     results = await fetch_bills(bill_ids)
 
-    with get_connection() as conn:
+    async with get_pool().acquire() as conn:
         for bill_id, data in results:
             if isinstance(data, Exception):
                 print(f"  SKIP {bill_id}: {data}")
                 continue
-
-            conn.execute(
-                "INSERT OR IGNORE INTO bills (id, title, session) VALUES (?, ?, ?)",
-                (bill_id, data.get("title", ""), data.get("session", "")),
+            await conn.execute(
+                "INSERT INTO bills (id, title, session) VALUES ($1, $2, $3) "
+                "ON CONFLICT (id) DO NOTHING",
+                bill_id, data.get("title", ""), data.get("session", ""),
             )
-            inserted = _insert_actions(conn, bill_id, data.get("actions", []))
+            inserted = await _insert_actions(conn, bill_id, data.get("actions", []))
             print(f"  OK   {bill_id}: {data.get('title', '')[:60]}  ({inserted} actions)")
 
 
-def seed_from_csv(csv_path: Path) -> None:
-    """
-    Import legislative_tracker_updates.csv as the initial action cache.
-    Useful for populating history before the OpenStates API key is available.
-    """
+async def seed_from_csv(csv_path: Path) -> None:
     print(f"\nImporting actions from {csv_path}...")
     with open(csv_path, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
 
-    with get_connection() as conn:
+    async with get_pool().acquire() as conn:
         bills_seen: set[str] = set()
         for order_num, row in enumerate(rows):
             bill_id = normalize_bill_id(row["Bill"])
             if bill_id not in bills_seen:
-                conn.execute(
-                    "INSERT OR IGNORE INTO bills (id, title, session) VALUES (?, ?, ?)",
-                    (bill_id, row.get("Webpage Title", ""), "2025-2026"),
+                await conn.execute(
+                    "INSERT INTO bills (id, title, session) VALUES ($1, $2, $3) "
+                    "ON CONFLICT (id) DO NOTHING",
+                    bill_id, row.get("Webpage Title", ""), "2025-2026",
                 )
                 bills_seen.add(bill_id)
-            conn.execute(
-                """INSERT OR IGNORE INTO actions
-                       (bill_id, date, chamber, description, order_num)
-                   VALUES (?, ?, ?, ?, ?)""",
-                (bill_id, row["Date"], row["Chamber"], row["Action"], order_num),
+            await conn.execute(
+                "INSERT INTO actions (bill_id, date, chamber, description, order_num) "
+                "VALUES ($1, $2, $3, $4, $5) ON CONFLICT (bill_id, order_num) DO NOTHING",
+                bill_id, row["Date"], row["Chamber"], row["Action"], order_num,
             )
     print(f"  Imported {len(rows)} rows for {len(bills_seen)} bills.")
 
 
-def _insert_actions(
-    conn: sqlite3.Connection, bill_id: str, actions: list[dict]
-) -> int:
+async def _insert_actions(conn, bill_id: str, actions: list[dict]) -> int:
     inserted = 0
     for action in actions:
-        cur = conn.execute(
-            """INSERT OR IGNORE INTO actions
-                   (bill_id, date, chamber, description, order_num)
-               VALUES (?, ?, ?, ?, ?)""",
-            (
-                bill_id,
-                action.get("date", ""),
-                extract_chamber(action),
-                action.get("description", ""),
-                action.get("order", 0),
-            ),
+        status = await conn.execute(
+            "INSERT INTO actions (bill_id, date, chamber, description, order_num) "
+            "VALUES ($1, $2, $3, $4, $5) ON CONFLICT (bill_id, order_num) DO NOTHING",
+            bill_id,
+            action.get("date", ""),
+            extract_chamber(action),
+            action.get("description", ""),
+            action.get("order", 0),
         )
-        inserted += cur.rowcount
+        if status == "INSERT 0 1":
+            inserted += 1
     return inserted
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Seed the tracker database from existing files."
-    )
-    parser.add_argument(
-        "--bills-file",
-        default="Legislative Tracker Bills.txt",
-        help="Path to the ILGA URL list (default: 'Legislative Tracker Bills.txt')",
-    )
-    parser.add_argument(
-        "--csv",
-        default=None,
-        help="Path to legislative_tracker_updates.csv to import as initial cache",
-    )
-    parser.add_argument(
-        "--skip-api",
-        action="store_true",
-        help="Skip the OpenStates API fetch (requires API key)",
-    )
-    args = parser.parse_args()
+async def run(args) -> None:
+    await create_pool()
+    await init_db()
 
-    init_db()
-
-    # Parse bill IDs from the URL list
     bills_path = Path(args.bills_file)
     if not bills_path.exists():
         print(f"Error: bills file not found: {bills_path}")
@@ -152,15 +118,23 @@ def main() -> None:
 
     print(f"Parsed {len(bill_ids)} bill IDs: {bill_ids}")
 
-    # Optionally seed from CSV first (no API key needed)
     if args.csv:
-        seed_from_csv(Path(args.csv))
+        await seed_from_csv(Path(args.csv))
 
-    # Fetch live metadata + full action history from OpenStates
     if not args.skip_api:
-        asyncio.run(seed_from_openstates(bill_ids))
+        await seed_from_openstates(bill_ids)
 
+    await close_pool()
     print("\nMigration complete.")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Seed the tracker database from existing files.")
+    parser.add_argument("--bills-file", default="Legislative Tracker Bills.txt")
+    parser.add_argument("--csv", default=None)
+    parser.add_argument("--skip-api", action="store_true")
+    args = parser.parse_args()
+    asyncio.run(run(args))
 
 
 if __name__ == "__main__":
