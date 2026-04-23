@@ -1,4 +1,5 @@
 import os
+import warnings
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -15,14 +16,12 @@ DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 DB_PATH: Path = Path(__file__).parent / "data" / "tracker.db"
 
 if not OPENSTATES_API_KEY:
-    import warnings
     warnings.warn(
         "OPENSTATES_API_KEY is not set. Set it in a .env file to enable live fetching.",
         stacklevel=1,
     )
 
 if not DATABASE_URL:
-    import warnings
     warnings.warn(
         "DATABASE_URL is not set. Set it in a .env file to connect to Supabase.",
         stacklevel=1,
