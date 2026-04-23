@@ -1,49 +1,43 @@
-import sqlite3
-from config import DB_PATH
+import asyncpg
+from config import DATABASE_URL
+
+_pool: asyncpg.Pool | None = None
 
 
-def get_connection() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")   # safe concurrent reads
-    conn.execute("PRAGMA foreign_keys=ON")
-    return conn
+async def create_pool() -> asyncpg.Pool:
+    global _pool
+    _pool = await asyncpg.create_pool(DATABASE_URL, statement_cache_size=0)
+    return _pool
 
 
-def init_db() -> None:
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with get_connection() as conn:
-        # Migrate existing databases that predate last_fetched_at
-        try:
-            conn.execute("ALTER TABLE bills ADD COLUMN last_fetched_at TEXT")
-        except Exception:
-            pass  # Column already exists
+async def close_pool() -> None:
+    global _pool
+    if _pool:
+        await _pool.close()
+        _pool = None
 
-        # Migrate existing databases that predate note
-        try:
-            conn.execute("ALTER TABLE bills ADD COLUMN note TEXT NOT NULL DEFAULT ''")
-        except Exception:
-            pass  # Column already exists
 
-        # Migrate existing databases that predate source_url
-        try:
-            conn.execute("ALTER TABLE bills ADD COLUMN source_url TEXT NOT NULL DEFAULT ''")
-        except Exception:
-            pass  # Column already exists
+def get_pool() -> asyncpg.Pool:
+    assert _pool is not None, "Database pool not initialized — call create_pool() first"
+    return _pool
 
-        conn.executescript("""
+
+async def init_db() -> None:
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
             CREATE TABLE IF NOT EXISTS bills (
                 id              TEXT PRIMARY KEY,
                 title           TEXT,
                 session         TEXT,
-                added_at        TEXT DEFAULT (datetime('now')),
+                added_at        TEXT DEFAULT to_char(NOW() AT TIME ZONE 'UTC', 'YYYY-MM-DD HH24:MI:SS'),
                 last_fetched_at TEXT,
                 note            TEXT NOT NULL DEFAULT '',
                 source_url      TEXT NOT NULL DEFAULT ''
             );
 
             CREATE TABLE IF NOT EXISTS actions (
-                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                id          SERIAL PRIMARY KEY,
                 bill_id     TEXT    NOT NULL REFERENCES bills(id) ON DELETE CASCADE,
                 date        TEXT,
                 chamber     TEXT,

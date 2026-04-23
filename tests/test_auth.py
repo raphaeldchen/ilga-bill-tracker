@@ -1,29 +1,38 @@
-import os
 import pytest
-import sqlite3
 from fastapi.testclient import TestClient
-from unittest.mock import patch
+from unittest.mock import AsyncMock, MagicMock, patch
 from routers.auth import COOKIE_NAME
 
 
 @pytest.fixture
 def auth_client(monkeypatch):
-    """TestClient with in-memory DB and ADMIN_PASSWORD set."""
+    """TestClient with mocked asyncpg pool and ADMIN_PASSWORD set."""
     monkeypatch.setenv("ADMIN_PASSWORD", "testpass")
 
-    from database import init_db
-    conn = sqlite3.connect(":memory:", check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys=ON")
+    import database
 
-    with patch("database.get_connection", return_value=conn), \
-         patch("services.bills.get_connection", return_value=conn):
-        init_db()
+    mock_conn = MagicMock()
+    mock_conn.fetch = AsyncMock(return_value=[])
+    mock_conn.fetchrow = AsyncMock(return_value=None)
+    mock_conn.execute = AsyncMock(return_value="DELETE 0")
+
+    mock_acquire_ctx = MagicMock()
+    mock_acquire_ctx.__aenter__ = AsyncMock(return_value=mock_conn)
+    mock_acquire_ctx.__aexit__ = AsyncMock(return_value=False)
+
+    mock_pool = MagicMock()
+    mock_pool.acquire = MagicMock(return_value=mock_acquire_ctx)
+
+    database._pool = mock_pool
+
+    with patch("main.create_pool", AsyncMock(return_value=mock_pool)), \
+         patch("main.init_db", AsyncMock()), \
+         patch("main.close_pool", AsyncMock()):
         from main import app
         with TestClient(app) as c:
             yield c
 
-    conn.close()
+    database._pool = None
 
 
 def test_write_api_without_cookie_returns_401(auth_client):
