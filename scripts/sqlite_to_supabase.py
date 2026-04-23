@@ -33,27 +33,25 @@ async def main() -> None:
     sqlite_conn = sqlite3.connect(DB_PATH)
     sqlite_conn.row_factory = sqlite3.Row
 
-    pg_conn = await asyncpg.connect(DATABASE_URL)
+    pg_conn = await asyncpg.connect(DATABASE_URL, statement_cache_size=0)
 
     bills = sqlite_conn.execute("SELECT * FROM bills").fetchall()
     print(f"Migrating {len(bills)} bills...")
-    for bill in bills:
-        await pg_conn.execute(
-            "INSERT INTO bills (id, title, session, added_at, last_fetched_at, note, source_url) "
-            "VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING",
-            bill["id"], bill["title"], bill["session"], bill["added_at"],
-            bill["last_fetched_at"], bill["note"], bill["source_url"],
-        )
+    await pg_conn.executemany(
+        "INSERT INTO bills (id, title, session, added_at, last_fetched_at, note, source_url) "
+        "VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING",
+        [(b["id"], b["title"], b["session"], b["added_at"],
+          b["last_fetched_at"], b["note"], b["source_url"]) for b in bills],
+    )
 
     actions = sqlite_conn.execute("SELECT * FROM actions").fetchall()
     print(f"Migrating {len(actions)} actions...")
-    for action in actions:
-        await pg_conn.execute(
-            "INSERT INTO actions (bill_id, date, chamber, description, order_num) "
-            "VALUES ($1, $2, $3, $4, $5) ON CONFLICT (bill_id, order_num) DO NOTHING",
-            action["bill_id"], action["date"], action["chamber"],
-            action["description"], action["order_num"],
-        )
+    await pg_conn.executemany(
+        "INSERT INTO actions (bill_id, date, chamber, description, order_num) "
+        "VALUES ($1, $2, $3, $4, $5) ON CONFLICT (bill_id, order_num) DO NOTHING",
+        [(a["bill_id"], a["date"], a["chamber"], a["description"], a["order_num"])
+         for a in actions],
+    )
 
     sqlite_conn.close()
     await pg_conn.close()
