@@ -2,14 +2,16 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from database import init_db
+from database import create_pool, close_pool, init_db
 from routers import bills, actions, fetch, auth
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    await create_pool()
+    await init_db()
     yield
+    await close_pool()
 
 
 app = FastAPI(title="Illinois Legislative Tracker", lifespan=lifespan)

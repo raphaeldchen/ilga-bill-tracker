@@ -7,17 +7,17 @@ router = APIRouter(prefix="/api/actions", tags=["actions"])
 
 
 @router.get("")
-def list_actions(bill_id: str | None = Query(default=None)) -> list[dict]:
+async def list_actions(bill_id: str | None = Query(default=None)) -> list[dict]:
     if bill_id:
         bill_id = normalize_bill_id(bill_id)
-    return get_actions(bill_id)
+    return await get_actions(bill_id)
 
 
 @router.get("/export")
-def export_actions() -> JSONResponse:
+async def export_actions() -> JSONResponse:
     """Download all cached actions as a JSON file."""
     return JSONResponse(
-        content=get_actions(),
+        content=await get_actions(),
         headers={
             "Content-Disposition": "attachment; filename=legislative_tracker_updates.json"
         },
