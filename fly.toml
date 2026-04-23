@@ -8,10 +8,6 @@ primary_region = 'ord'
 
 [build]
 
-[[mounts]]
-  source = 'tracker_data'
-  destination = '/app/data'
-
 [http_service]
   internal_port = 8000
   force_https = true
