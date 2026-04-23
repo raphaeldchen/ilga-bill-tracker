@@ -1,11 +1,15 @@
+import os
 import pytest
-import pytest_asyncio
 from database import create_pool, close_pool, init_db, get_pool
+
+pytestmark = pytest.mark.skipif(
+    not os.getenv("DATABASE_URL"),
+    reason="DATABASE_URL not set"
+)
 
 
 @pytest.mark.asyncio
 async def test_pool_creates_and_closes():
-    """Test that pool can be created and closed."""
     await create_pool()
     pool = get_pool()
     assert pool is not None
@@ -14,7 +18,6 @@ async def test_pool_creates_and_closes():
 
 @pytest.mark.asyncio
 async def test_init_db_creates_tables():
-    """Test that init_db creates bills and actions tables."""
     await create_pool()
     await init_db()
     pool = get_pool()

@@ -1,8 +1,8 @@
 import csv
 import pytest
-from unittest.mock import patch
+import pytest_asyncio
+import database
 from scripts.migrate import parse_bill_id_from_url, seed_from_csv
-from tests.conftest import FAKE_BILL
 
 
 # ── parse_bill_id_from_url ────────────────────────────────────────────────────
@@ -33,6 +33,28 @@ def test_parse_empty_string():
 
 # ── seed_from_csv ─────────────────────────────────────────────────────────────
 
+@pytest_asyncio.fixture(autouse=True)
+async def setup_db(pool):
+    database._pool = pool
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS bills (
+                id TEXT PRIMARY KEY, title TEXT, session TEXT,
+                added_at TEXT DEFAULT to_char(NOW() AT TIME ZONE 'UTC', 'YYYY-MM-DD HH24:MI:SS'),
+                last_fetched_at TEXT, note TEXT NOT NULL DEFAULT '', source_url TEXT NOT NULL DEFAULT ''
+            );
+            CREATE TABLE IF NOT EXISTS actions (
+                id SERIAL PRIMARY KEY, bill_id TEXT NOT NULL REFERENCES bills(id) ON DELETE CASCADE,
+                date TEXT, chamber TEXT, description TEXT, order_num INTEGER,
+                UNIQUE(bill_id, order_num)
+            );
+        """)
+    yield
+    async with pool.acquire() as conn:
+        await conn.execute("DROP TABLE IF EXISTS actions; DROP TABLE IF EXISTS bills;")
+    database._pool = None
+
+
 @pytest.fixture
 def csv_file(tmp_path):
     path = tmp_path / "test_updates.csv"
@@ -50,34 +72,34 @@ def csv_file(tmp_path):
     return path
 
 
-def test_seed_from_csv_inserts_bills(db, csv_file):
-    with patch("scripts.migrate.get_connection", return_value=db):
-        seed_from_csv(csv_file)
-
-    bills = db.execute("SELECT id FROM bills ORDER BY id").fetchall()
+@pytest.mark.asyncio
+async def test_seed_from_csv_inserts_bills(csv_file, pool):
+    await seed_from_csv(csv_file)
+    async with pool.acquire() as conn:
+        bills = await conn.fetch("SELECT id FROM bills ORDER BY id")
     assert len(bills) == 2
     assert bills[0]["id"] == "HB1288"
     assert bills[1]["id"] == "SB0019"
 
 
-def test_seed_from_csv_inserts_actions(db, csv_file):
-    with patch("scripts.migrate.get_connection", return_value=db):
-        seed_from_csv(csv_file)
-
-    actions = db.execute("SELECT * FROM actions ORDER BY order_num").fetchall()
+@pytest.mark.asyncio
+async def test_seed_from_csv_inserts_actions(csv_file, pool):
+    await seed_from_csv(csv_file)
+    async with pool.acquire() as conn:
+        actions = await conn.fetch("SELECT * FROM actions ORDER BY order_num")
     assert len(actions) == 3
     assert actions[0]["bill_id"] == "HB1288"
     assert actions[0]["description"] == "First reading"
     assert actions[2]["bill_id"] == "SB0019"
 
 
-def test_seed_from_csv_idempotent(db, csv_file):
+@pytest.mark.asyncio
+async def test_seed_from_csv_idempotent(csv_file, pool):
     """Running seed_from_csv twice does not duplicate bills or actions."""
-    with patch("scripts.migrate.get_connection", return_value=db):
-        seed_from_csv(csv_file)
-        seed_from_csv(csv_file)
-
-    bill_count = db.execute("SELECT COUNT(*) FROM bills").fetchone()[0]
-    action_count = db.execute("SELECT COUNT(*) FROM actions").fetchone()[0]
+    await seed_from_csv(csv_file)
+    await seed_from_csv(csv_file)
+    async with pool.acquire() as conn:
+        bill_count = await conn.fetchval("SELECT COUNT(*) FROM bills")
+        action_count = await conn.fetchval("SELECT COUNT(*) FROM actions")
     assert bill_count == 2
     assert action_count == 3
