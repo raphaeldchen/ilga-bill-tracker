@@ -1,0 +1,32 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - heading "Illinois Legislative Tracker" [level=1] [ref=e5]
+      - generic [ref=e6]:
+        - button "Switch to dark mode" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - link "Admin" [ref=e10] [cursor=pointer]:
+          - /url: /admin
+    - generic [ref=e12]:
+      - generic [ref=e13]: 104th General Assembly
+      - generic [ref=e14]: ·
+      - generic [ref=e15]: May 16, 2026
+      - generic [ref=e16]: ·
+      - generic [ref=e17]: —
+  - generic [ref=e18]:
+    - complementary [ref=e19]:
+      - paragraph [ref=e21]: Tracked Bills
+      - button "All Bills" [ref=e22] [cursor=pointer]
+      - list [ref=e23]
+    - main [ref=e24]:
+      - generic [ref=e26]: All Activity
+      - table [ref=e28]:
+        - rowgroup [ref=e29]:
+          - row "Bill Date Ch. Action" [ref=e30]:
+            - columnheader "Bill" [ref=e31]
+            - columnheader "Date" [ref=e32]
+            - columnheader "Ch." [ref=e33]
+            - columnheader "Action" [ref=e34]
+        - rowgroup [ref=e35]:
+          - row "Loading…" [ref=e36]:
+            - cell "Loading…" [ref=e37]

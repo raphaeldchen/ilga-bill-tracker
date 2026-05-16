@@ -334,6 +334,12 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.bill-item-id-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .remove-btn {
   background: none;
   border: none;

@@ -1,0 +1,508 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - heading "Illinois Legislative Tracker Admin" [level=1] [ref=e5]:
+        - text: Illinois Legislative Tracker
+        - generic [ref=e6]: Admin
+      - generic [ref=e7]:
+        - button "Fetch Updates" [ref=e8] [cursor=pointer]
+        - button "Switch to dark mode" [ref=e9] [cursor=pointer]:
+          - img [ref=e10]
+        - link "Log out" [ref=e12] [cursor=pointer]:
+          - /url: /logout
+    - generic [ref=e14]:
+      - generic [ref=e15]: 104th General Assembly
+      - generic [ref=e16]: ·
+      - generic [ref=e17]: May 16, 2026
+      - generic [ref=e18]: ·
+      - generic [ref=e19]: 26 bills tracked
+  - generic [ref=e20]:
+    - complementary [ref=e21]:
+      - paragraph [ref=e23]: Tracked Bills
+      - button "All Bills" [ref=e24] [cursor=pointer]
+      - list [ref=e25]:
+        - listitem [ref=e26]:
+          - button "HB0001" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]:
+              - text: HB0001
+              - link "View on ILGA" [ref=e29]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1&GAID=18&DocTypeID=HB&LegId=156928&SessionID=114
+                - img [ref=e30]
+          - button "×" [ref=e34] [cursor=pointer]
+          - generic [ref=e35]: HEMP CANNABINOIDS-MINORS
+          - generic [ref=e36]: "Latest: Feb 25, 2025"
+        - listitem [ref=e37]:
+          - button "HB1245" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39]:
+              - text: HB1245
+              - link "View on ILGA" [ref=e40]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1245&GAID=18&DocTypeID=HB&LegId=157037&SessionID=114
+                - img [ref=e41]
+          - button "×" [ref=e45] [cursor=pointer]
+          - generic [ref=e46]: CD CORR-MED RELEASE-HEARINGS
+          - generic [ref=e47]: "Latest: Invalid Date"
+        - listitem [ref=e48]:
+          - button "HB1288" [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]:
+              - text: HB1288
+              - link "View on ILGA" [ref=e51]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1288&GAID=18&DocTypeID=HB&LegId=157082&SessionID=114
+                - img [ref=e52]
+          - button "×" [ref=e56] [cursor=pointer]
+          - generic [ref=e57]: ELECTED PUBLIC OFFICE-ELIGIBLE
+          - generic [ref=e58]: "Latest: Mar 30, 2026"
+        - listitem [ref=e59]:
+          - button "HB1426" [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]:
+              - text: HB1426
+              - link "View on ILGA" [ref=e62]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1426&GAID=18&DocTypeID=HB&LegId=157425&SessionID=114
+                - img [ref=e63]
+          - button "×" [ref=e67] [cursor=pointer]
+          - generic [ref=e68]: JUV CT-EXCLUDED JURISDICTION
+          - generic [ref=e69]: "Latest: Invalid Date"
+        - listitem [ref=e70]:
+          - button "HB1428" [ref=e71] [cursor=pointer]:
+            - generic [ref=e72]:
+              - text: HB1428
+              - link "View on ILGA" [ref=e73]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1428&GAID=18&DocTypeID=HB&LegId=157427&SessionID=114
+                - img [ref=e74]
+          - button "×" [ref=e78] [cursor=pointer]
+          - generic [ref=e79]: ISOLATED CONFINEMENT RESTRICT
+          - generic [ref=e80]: "Latest: Apr 30, 2026"
+        - listitem [ref=e81]:
+          - button "HB1628" [ref=e82] [cursor=pointer]:
+            - generic [ref=e83]:
+              - text: HB1628
+              - link "View on ILGA" [ref=e84]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1628&GAID=18&DocTypeID=HB&LegId=158234&SessionID=114
+                - img [ref=e85]
+          - button "×" [ref=e89] [cursor=pointer]
+          - generic [ref=e90]: SEIZURE & FORFEITURE REPORT
+          - generic [ref=e91]: "Latest: Aug 15, 2025"
+        - listitem [ref=e92]:
+          - button "HB1835" [ref=e93] [cursor=pointer]:
+            - generic [ref=e94]:
+              - text: HB1835
+              - link "View on ILGA" [ref=e95]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1835&GAID=18&DocTypeID=HB&LegId=159322&SessionID=114
+                - img [ref=e96]
+          - button "×" [ref=e100] [cursor=pointer]
+          - generic [ref=e101]: CRIM CD-FIREARM OFFENSES
+          - generic [ref=e102]: "Latest: Invalid Date"
+        - listitem [ref=e103]:
+          - button "HB2367" [ref=e104] [cursor=pointer]:
+            - generic [ref=e105]:
+              - text: HB2367
+              - link "View on ILGA" [ref=e106]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2367&GAID=18&DocTypeID=HB&LegId=160080&SessionID=114
+                - img [ref=e107]
+          - button "×" [ref=e111] [cursor=pointer]
+          - generic [ref=e112]: CD CORR-SENTENCE CREDITS
+          - generic [ref=e113]: "Latest: Invalid Date"
+        - listitem [ref=e114]:
+          - button "HB2466" [ref=e115] [cursor=pointer]:
+            - generic [ref=e116]:
+              - text: HB2466
+              - link "View on ILGA" [ref=e117]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2466&GAID=18&DocTypeID=HB&LegId=160260&SessionID=114
+                - img [ref=e118]
+          - button "×" [ref=e122] [cursor=pointer]
+          - generic [ref=e123]: HIGHER ED-INCARCERATED STUDENT
+          - generic [ref=e124]: "Latest: Jun 2, 2025"
+        - listitem [ref=e125]:
+          - button "HB2764" [ref=e126] [cursor=pointer]:
+            - generic [ref=e127]:
+              - text: HB2764
+              - link "View on ILGA" [ref=e128]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2764&GAID=18&DocTypeID=HB&LegId=160801&SessionID=114
+                - img [ref=e129]
+          - button "×" [ref=e133] [cursor=pointer]
+          - generic [ref=e134]: CD CORR-EARNED REENTRY
+          - generic [ref=e135]: "Latest: Mar 27, 2026"
+        - listitem [ref=e136]:
+          - button "HB3449" [ref=e137] [cursor=pointer]:
+            - generic [ref=e138]:
+              - text: HB3449
+              - link "View on ILGA" [ref=e139]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3449&GAID=18&DocTypeID=HB&LegId=162086&SessionID=114
+                - img [ref=e140]
+          - button "×" [ref=e144] [cursor=pointer]
+          - generic [ref=e145]: CD CORR-SENTENCE CREDITS
+          - generic [ref=e146]: "Latest: Invalid Date"
+        - listitem [ref=e147]:
+          - button "HB3548" [ref=e148] [cursor=pointer]:
+            - generic [ref=e149]:
+              - text: HB3548
+              - link "View on ILGA" [ref=e150]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3548&GAID=18&DocTypeID=HB&LegId=162238&SessionID=114
+                - img [ref=e151]
+          - button "×" [ref=e155] [cursor=pointer]
+          - generic [ref=e156]: JUV CT-SPEEDY TRIAL-DETENTION
+          - generic [ref=e157]: "Latest: Invalid Date"
+        - listitem [ref=e158]:
+          - button "HB3549" [ref=e159] [cursor=pointer]:
+            - generic [ref=e160]:
+              - text: HB3549
+              - link "View on ILGA" [ref=e161]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3549&GAID=18&DocTypeID=HB&LegId=162239&SessionID=114
+                - img [ref=e162]
+          - button "×" [ref=e166] [cursor=pointer]
+          - generic [ref=e167]: CRIM PRO-VACATING SENTENCE
+          - generic [ref=e168]: "Latest: Invalid Date"
+        - listitem [ref=e169]:
+          - button "HB4224" [ref=e170] [cursor=pointer]:
+            - generic [ref=e171]:
+              - text: HB4224
+              - link "View on ILGA" [ref=e172]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4224&GAID=18&DocTypeID=HB&LegId=164674&SessionID=114
+                - img [ref=e173]
+          - button "×" [ref=e177] [cursor=pointer]
+          - generic [ref=e178]: CD CORR-COMMITTED-REMOTE WORK
+          - generic [ref=e179]: "Latest: Mar 27, 2026"
+        - listitem [ref=e180]:
+          - button "HB4235" [ref=e181] [cursor=pointer]:
+            - generic [ref=e182]:
+              - text: HB4235
+              - link "View on ILGA" [ref=e183]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4235&GAID=18&DocTypeID=HB&LegId=164706&SessionID=114
+                - img [ref=e184]
+          - button "×" [ref=e188] [cursor=pointer]
+          - generic [ref=e189]: CD CORR-COMMITTED PERSON MAIL
+          - generic [ref=e190]: "Latest: Apr 29, 2026"
+        - listitem [ref=e191]:
+          - button "HB4277" [ref=e192] [cursor=pointer]:
+            - generic [ref=e193]:
+              - text: HB4277
+              - link "View on ILGA" [ref=e194]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4277&GAID=18&DocTypeID=HB&LegId=164772&SessionID=114
+                - img [ref=e195]
+          - button "×" [ref=e199] [cursor=pointer]
+          - generic [ref=e200]: NOTARIES-APPLICATION BY FELON
+          - generic [ref=e201]: "Latest: Apr 29, 2026"
+        - listitem [ref=e202]:
+          - button "HB5287" [ref=e203] [cursor=pointer]:
+            - generic [ref=e204]:
+              - text: HB5287
+              - link "View on ILGA" [ref=e205]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=5287&GAID=18&DocTypeID=HB&LegId=167009&SessionID=114
+                - img [ref=e206]
+          - button "×" [ref=e210] [cursor=pointer]
+          - generic [ref=e211]: CD CORR-SENTENCE CREDITS
+          - generic [ref=e212]: "Latest: Apr 16, 2026"
+        - listitem [ref=e213]:
+          - button "SB0019" [ref=e214] [cursor=pointer]:
+            - generic [ref=e215]:
+              - text: SB0019
+              - link "View on ILGA" [ref=e216]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=19&GAID=18&DocTypeID=SB&LegId=157109&SessionID=114
+                - img [ref=e217]
+          - button "×" [ref=e221] [cursor=pointer]
+          - generic [ref=e222]: PRB-ADMIN CHANGES
+          - generic [ref=e223]: "Latest: Jun 20, 2025"
+        - listitem [ref=e224]:
+          - button "SB0063" [ref=e225] [cursor=pointer]:
+            - generic [ref=e226]:
+              - text: SB0063
+              - link "View on ILGA" [ref=e227]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=63&GAID=18&DocTypeID=SB&LegId=157168&SessionID=114
+                - img [ref=e228]
+          - button "×" [ref=e232] [cursor=pointer]
+          - generic [ref=e233]: JUV CT-EXCLUDED JURISDICTION
+          - generic [ref=e234]: "Latest: Invalid Date"
+        - listitem [ref=e235]:
+          - button "SB0086" [ref=e236] [cursor=pointer]:
+            - generic [ref=e237]:
+              - text: SB0086
+              - link "View on ILGA" [ref=e238]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=86&GAID=18&DocTypeID=SB&LegId=157199&SessionID=114
+                - img [ref=e239]
+          - button "×" [ref=e243] [cursor=pointer]
+          - generic [ref=e244]: CD CORR-PAROLE-25 YRS
+          - generic [ref=e245]: "Latest: Mar 25, 2026"
+        - listitem [ref=e246]:
+          - button "SB0108" [ref=e247] [cursor=pointer]:
+            - generic [ref=e248]:
+              - text: SB0108
+              - link "View on ILGA" [ref=e249]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=108&GAID=18&DocTypeID=SB&LegId=157242&SessionID=114
+                - img [ref=e250]
+          - button "×" [ref=e254] [cursor=pointer]
+          - generic [ref=e255]: CRIM PRO-ASSESSMENT FEES
+          - generic [ref=e256]: "Latest: Jun 30, 2025"
+        - listitem [ref=e257]:
+          - button "SB0248" [ref=e258] [cursor=pointer]:
+            - generic [ref=e259]:
+              - text: SB0248
+              - link "View on ILGA" [ref=e260]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=248&GAID=18&DocTypeID=SB&LegId=157662&SessionID=114
+                - img [ref=e261]
+          - button "×" [ref=e265] [cursor=pointer]
+          - generic [ref=e266]: CRIM PRO-POST-CONVICT PETITION
+          - generic [ref=e267]: "Latest: Apr 21, 2026"
+        - listitem [ref=e268]:
+          - button "SB1266" [ref=e269] [cursor=pointer]:
+            - generic [ref=e270]:
+              - text: SB1266
+              - link "View on ILGA" [ref=e271]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1266&GAID=18&DocTypeID=SB&LegId=159113&SessionID=114
+                - img [ref=e272]
+          - button "×" [ref=e276] [cursor=pointer]
+          - generic [ref=e277]: CRIM PRO-VACATING SENTENCE
+          - generic [ref=e278]: "Latest: Mar 24, 2026"
+        - listitem [ref=e279]:
+          - button "SB1536" [ref=e280] [cursor=pointer]:
+            - generic [ref=e281]:
+              - text: SB1536
+              - link "View on ILGA" [ref=e282]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1536&GAID=18&DocTypeID=SB&LegId=160224&SessionID=114
+                - img [ref=e283]
+          - button "×" [ref=e287] [cursor=pointer]
+          - generic [ref=e288]: JUV CT-TIME OF TRIAL
+          - generic [ref=e289]: "Latest: Invalid Date"
+        - listitem [ref=e290]:
+          - button "SB1849" [ref=e291] [cursor=pointer]:
+            - generic [ref=e292]:
+              - text: SB1849
+              - link "View on ILGA" [ref=e293]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1849&GAID=18&DocTypeID=SB&LegId=161008&SessionID=114
+                - img [ref=e294]
+          - button "×" [ref=e298] [cursor=pointer]
+          - generic [ref=e299]: CRIM CD-FIREARM OFFENSES
+          - generic [ref=e300]: "Latest: Invalid Date"
+        - listitem [ref=e301]:
+          - button "SB2257" [ref=e302] [cursor=pointer]:
+            - generic [ref=e303]:
+              - text: SB2257
+              - link "View on ILGA" [ref=e304]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2257&GAID=18&DocTypeID=SB&LegId=162030&SessionID=114
+                - img [ref=e305]
+          - button "×" [ref=e309] [cursor=pointer]
+          - generic [ref=e310]: CD CORR-SENTENCE CREDITS
+          - generic [ref=e311]: "Latest: Invalid Date"
+      - generic [ref=e312]:
+        - paragraph [ref=e313]: Add Bill
+        - generic [ref=e314]:
+          - textbox "HB1288" [ref=e315]
+          - button "Add" [ref=e316] [cursor=pointer]
+    - main [ref=e317]:
+      - generic [ref=e318]:
+        - generic [ref=e319]: All Activity
+        - generic [ref=e320]: 26 bills
+      - table [ref=e322]:
+        - rowgroup [ref=e323]:
+          - row "Bill Date Ch. Action" [ref=e324]:
+            - columnheader "Bill" [ref=e325]
+            - columnheader "Date" [ref=e326]
+            - columnheader "Ch." [ref=e327]
+            - columnheader "Action" [ref=e328]
+        - rowgroup [ref=e329]:
+          - row "HB1428 Apr 30, 2026 H Added Co-Sponsor Rep. Will Guzzardi" [ref=e330] [cursor=pointer]:
+            - cell "HB1428" [ref=e331]:
+              - link "HB1428" [ref=e332]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1428&GAID=18&DocTypeID=HB&LegId=157427&SessionID=114
+            - cell "Apr 30, 2026" [ref=e333]
+            - cell "H" [ref=e334]:
+              - generic [ref=e335]: H
+            - cell "Added Co-Sponsor Rep. Will Guzzardi" [ref=e336]
+          - row "HB4235 Apr 29, 2026 S Do Pass Criminal Law; 007-000-000" [ref=e337] [cursor=pointer]:
+            - cell "HB4235" [ref=e338]:
+              - link "HB4235" [ref=e339]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4235&GAID=18&DocTypeID=HB&LegId=164706&SessionID=114
+            - cell "Apr 29, 2026" [ref=e340]
+            - cell "S" [ref=e341]:
+              - generic [ref=e342]: S
+            - cell "Do Pass Criminal Law; 007-000-000" [ref=e343]
+          - row "HB4277 Apr 29, 2026 S Added as Alternate Co-Sponsor Sen. Mark L. Walker" [ref=e344] [cursor=pointer]:
+            - cell "HB4277" [ref=e345]:
+              - link "HB4277" [ref=e346]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4277&GAID=18&DocTypeID=HB&LegId=164772&SessionID=114
+            - cell "Apr 29, 2026" [ref=e347]
+            - cell "S" [ref=e348]:
+              - generic [ref=e349]: S
+            - cell "Added as Alternate Co-Sponsor Sen. Mark L. Walker" [ref=e350]
+          - row "SB0248 Apr 21, 2026 H Added Alternate Co-Sponsor Rep. Kevin John Olickal" [ref=e351] [cursor=pointer]:
+            - cell "SB0248" [ref=e352]:
+              - link "SB0248" [ref=e353]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=248&GAID=18&DocTypeID=SB&LegId=157662&SessionID=114
+            - cell "Apr 21, 2026" [ref=e354]
+            - cell "H" [ref=e355]:
+              - generic [ref=e356]: H
+            - cell "Added Alternate Co-Sponsor Rep. Kevin John Olickal" [ref=e357]
+          - row "HB5287 Apr 16, 2026 H Added Co-Sponsor Rep. Kevin John Olickal" [ref=e358] [cursor=pointer]:
+            - cell "HB5287" [ref=e359]:
+              - link "HB5287" [ref=e360]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=5287&GAID=18&DocTypeID=HB&LegId=167009&SessionID=114
+            - cell "Apr 16, 2026" [ref=e361]
+            - cell "H" [ref=e362]:
+              - generic [ref=e363]: H
+            - cell "Added Co-Sponsor Rep. Kevin John Olickal" [ref=e364]
+          - row "HB1288 Mar 30, 2026 H Added Co-Sponsor Rep. Michael Crawford" [ref=e365] [cursor=pointer]:
+            - cell "HB1288" [ref=e366]:
+              - link "HB1288" [ref=e367]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1288&GAID=18&DocTypeID=HB&LegId=157082&SessionID=114
+            - cell "Mar 30, 2026" [ref=e368]
+            - cell "H" [ref=e369]:
+              - generic [ref=e370]: H
+            - cell "Added Co-Sponsor Rep. Michael Crawford" [ref=e371]
+          - row "HB2764 Mar 27, 2026 H Rule 19(a) / Re-referred to Rules Committee" [ref=e372] [cursor=pointer]:
+            - cell "HB2764" [ref=e373]:
+              - link "HB2764" [ref=e374]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2764&GAID=18&DocTypeID=HB&LegId=160801&SessionID=114
+            - cell "Mar 27, 2026" [ref=e375]
+            - cell "H" [ref=e376]:
+              - generic [ref=e377]: H
+            - cell "Rule 19(a) / Re-referred to Rules Committee" [ref=e378]
+          - row "HB4224 Mar 27, 2026 H Rule 19(a) / Re-referred to Rules Committee" [ref=e379] [cursor=pointer]:
+            - cell "HB4224" [ref=e380]:
+              - link "HB4224" [ref=e381]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=4224&GAID=18&DocTypeID=HB&LegId=164674&SessionID=114
+            - cell "Mar 27, 2026" [ref=e382]
+            - cell "H" [ref=e383]:
+              - generic [ref=e384]: H
+            - cell "Rule 19(a) / Re-referred to Rules Committee" [ref=e385]
+          - row "SB0086 Mar 25, 2026 S Added as Co-Sponsor Sen. Emil Jones, III" [ref=e386] [cursor=pointer]:
+            - cell "SB0086" [ref=e387]:
+              - link "SB0086" [ref=e388]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=86&GAID=18&DocTypeID=SB&LegId=157199&SessionID=114
+            - cell "Mar 25, 2026" [ref=e389]
+            - cell "S" [ref=e390]:
+              - generic [ref=e391]: S
+            - cell "Added as Co-Sponsor Sen. Emil Jones, III" [ref=e392]
+          - row "SB1266 Mar 24, 2026 S Added as Co-Sponsor Sen. Javier L. Cervantes" [ref=e393] [cursor=pointer]:
+            - cell "SB1266" [ref=e394]:
+              - link "SB1266" [ref=e395]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1266&GAID=18&DocTypeID=SB&LegId=159113&SessionID=114
+            - cell "Mar 24, 2026" [ref=e396]
+            - cell "S" [ref=e397]:
+              - generic [ref=e398]: S
+            - cell "Added as Co-Sponsor Sen. Javier L. Cervantes" [ref=e399]
+          - row "HB1628 Aug 15, 2025 H Governor Approved" [ref=e400] [cursor=pointer]:
+            - cell "HB1628" [ref=e401]:
+              - link "HB1628" [ref=e402]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1628&GAID=18&DocTypeID=HB&LegId=158234&SessionID=114
+            - cell "Aug 15, 2025" [ref=e403]
+            - cell "H" [ref=e404]:
+              - generic [ref=e405]: H
+            - cell "Governor Approved" [ref=e406]
+          - row "SB0108 Jun 30, 2025 S Governor Approved" [ref=e407] [cursor=pointer]:
+            - cell "SB0108" [ref=e408]:
+              - link "SB0108" [ref=e409]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=108&GAID=18&DocTypeID=SB&LegId=157242&SessionID=114
+            - cell "Jun 30, 2025" [ref=e410]
+            - cell "S" [ref=e411]:
+              - generic [ref=e412]: S
+            - cell "Governor Approved" [ref=e413]
+          - row "SB0019 Jun 20, 2025 S Governor Approved" [ref=e414] [cursor=pointer]:
+            - cell "SB0019" [ref=e415]:
+              - link "SB0019" [ref=e416]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=19&GAID=18&DocTypeID=SB&LegId=157109&SessionID=114
+            - cell "Jun 20, 2025" [ref=e417]
+            - cell "S" [ref=e418]:
+              - generic [ref=e419]: S
+            - cell "Governor Approved" [ref=e420]
+          - row "HB2466 Jun 2, 2025 S Rule 3-9(a) / Re-referred to Assignments" [ref=e421] [cursor=pointer]:
+            - cell "HB2466" [ref=e422]:
+              - link "HB2466" [ref=e423]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2466&GAID=18&DocTypeID=HB&LegId=160260&SessionID=114
+            - cell "Jun 2, 2025" [ref=e424]
+            - cell "S" [ref=e425]:
+              - generic [ref=e426]: S
+            - cell "Rule 3-9(a) / Re-referred to Assignments" [ref=e427]
+          - row "HB1245 Invalid Date H Rule 19(a) / Re-referred to Rules Committee" [ref=e428] [cursor=pointer]:
+            - cell "HB1245" [ref=e429]:
+              - link "HB1245" [ref=e430]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1245&GAID=18&DocTypeID=HB&LegId=157037&SessionID=114
+            - cell "Invalid Date" [ref=e431]
+            - cell "H" [ref=e432]:
+              - generic [ref=e433]: H
+            - cell "Rule 19(a) / Re-referred to Rules Committee" [ref=e434]
+          - row "SB1536 Invalid Date S Added as Chief Co-Sponsor Sen. Graciela Guzmán" [ref=e435] [cursor=pointer]:
+            - cell "SB1536" [ref=e436]:
+              - link "SB1536" [ref=e437]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1536&GAID=18&DocTypeID=SB&LegId=160224&SessionID=114
+            - cell "Invalid Date" [ref=e438]
+            - cell "S" [ref=e439]:
+              - generic [ref=e440]: S
+            - cell "Added as Chief Co-Sponsor Sen. Graciela Guzmán" [ref=e441]
+          - row "HB3549 Invalid Date H Added Co-Sponsor Rep. Edgar González, Jr." [ref=e442] [cursor=pointer]:
+            - cell "HB3549" [ref=e443]:
+              - link "HB3549" [ref=e444]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3549&GAID=18&DocTypeID=HB&LegId=162239&SessionID=114
+            - cell "Invalid Date" [ref=e445]
+            - cell "H" [ref=e446]:
+              - generic [ref=e447]: H
+            - cell "Added Co-Sponsor Rep. Edgar González, Jr." [ref=e448]
+          - row "SB2257 Invalid Date S Added as Co-Sponsor Sen. Graciela Guzmán" [ref=e449] [cursor=pointer]:
+            - cell "SB2257" [ref=e450]:
+              - link "SB2257" [ref=e451]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2257&GAID=18&DocTypeID=SB&LegId=162030&SessionID=114
+            - cell "Invalid Date" [ref=e452]
+            - cell "S" [ref=e453]:
+              - generic [ref=e454]: S
+            - cell "Added as Co-Sponsor Sen. Graciela Guzmán" [ref=e455]
+          - row "HB3449 Invalid Date H Rule 19(a) / Re-referred to Rules Committee" [ref=e456] [cursor=pointer]:
+            - cell "HB3449" [ref=e457]:
+              - link "HB3449" [ref=e458]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3449&GAID=18&DocTypeID=HB&LegId=162086&SessionID=114
+            - cell "Invalid Date" [ref=e459]
+            - cell "H" [ref=e460]:
+              - generic [ref=e461]: H
+            - cell "Rule 19(a) / Re-referred to Rules Committee" [ref=e462]
+          - row "HB3548 Invalid Date H Rule 19(a) / Re-referred to Rules Committee" [ref=e463] [cursor=pointer]:
+            - cell "HB3548" [ref=e464]:
+              - link "HB3548" [ref=e465]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=3548&GAID=18&DocTypeID=HB&LegId=162238&SessionID=114
+            - cell "Invalid Date" [ref=e466]
+            - cell "H" [ref=e467]:
+              - generic [ref=e468]: H
+            - cell "Rule 19(a) / Re-referred to Rules Committee" [ref=e469]
+          - row "SB0063 Invalid Date S Added as Co-Sponsor Sen. Graciela Guzmán" [ref=e470] [cursor=pointer]:
+            - cell "SB0063" [ref=e471]:
+              - link "SB0063" [ref=e472]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=63&GAID=18&DocTypeID=SB&LegId=157168&SessionID=114
+            - cell "Invalid Date" [ref=e473]
+            - cell "S" [ref=e474]:
+              - generic [ref=e475]: S
+            - cell "Added as Co-Sponsor Sen. Graciela Guzmán" [ref=e476]
+          - row "HB0001 Feb 25, 2025 H Added Co-Sponsor Rep. Rita Mayfield" [ref=e477] [cursor=pointer]:
+            - cell "HB0001" [ref=e478]:
+              - link "HB0001" [ref=e479]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1&GAID=18&DocTypeID=HB&LegId=156928&SessionID=114
+            - cell "Feb 25, 2025" [ref=e480]
+            - cell "H" [ref=e481]:
+              - generic [ref=e482]: H
+            - cell "Added Co-Sponsor Rep. Rita Mayfield" [ref=e483]
+          - row "HB2367 Invalid Date H Added Co-Sponsor Rep. Michael Crawford" [ref=e484] [cursor=pointer]:
+            - cell "HB2367" [ref=e485]:
+              - link "HB2367" [ref=e486]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=2367&GAID=18&DocTypeID=HB&LegId=160080&SessionID=114
+            - cell "Invalid Date" [ref=e487]
+            - cell "H" [ref=e488]:
+              - generic [ref=e489]: H
+            - cell "Added Co-Sponsor Rep. Michael Crawford" [ref=e490]
+          - row "SB1849 Invalid Date S Filed with Secretary by Sen. Mary Edly-Allen" [ref=e491] [cursor=pointer]:
+            - cell "SB1849" [ref=e492]:
+              - link "SB1849" [ref=e493]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1849&GAID=18&DocTypeID=SB&LegId=161008&SessionID=114
+            - cell "Invalid Date" [ref=e494]
+            - cell "S" [ref=e495]:
+              - generic [ref=e496]: S
+            - cell "Filed with Secretary by Sen. Mary Edly-Allen" [ref=e497]
+          - row "HB1835 Invalid Date H First Reading" [ref=e498] [cursor=pointer]:
+            - cell "HB1835" [ref=e499]:
+              - link "HB1835" [ref=e500]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1835&GAID=18&DocTypeID=HB&LegId=159322&SessionID=114
+            - cell "Invalid Date" [ref=e501]
+            - cell "H" [ref=e502]:
+              - generic [ref=e503]: H
+            - cell "First Reading" [ref=e504]
+          - row "HB1426 Invalid Date H First Reading" [ref=e505] [cursor=pointer]:
+            - cell "HB1426" [ref=e506]:
+              - link "HB1426" [ref=e507]:
+                - /url: https://ilga.gov/Legislation/BillStatus?DocNum=1426&GAID=18&DocTypeID=HB&LegId=157425&SessionID=114
+            - cell "Invalid Date" [ref=e508]
+            - cell "H" [ref=e509]:
+              - generic [ref=e510]: H
+            - cell "First Reading" [ref=e511]

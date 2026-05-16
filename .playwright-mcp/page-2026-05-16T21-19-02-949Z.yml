@@ -1,0 +1,12 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - paragraph [ref=e5]: Illinois Legislative Tracker
+    - paragraph [ref=e6]: Admin Access
+  - generic [ref=e8]:
+    - generic [ref=e9]: Password
+    - textbox "Password" [ref=e10]:
+      - /placeholder: Enter password
+    - button "Sign in" [ref=e11] [cursor=pointer]
+  - paragraph [ref=e12]:
+    - link "Back to public view" [ref=e13] [cursor=pointer]:
+      - /url: /

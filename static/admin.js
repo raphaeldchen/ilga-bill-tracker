@@ -96,9 +96,11 @@ function renderBills(bills) {
         'data-bill-id="' + id + '" onclick="setFilter(\'' + id + '\')">' +
         '<div class="bill-item-id">' +
           id +
-          srcLink +
-          '<button class="remove-btn" data-bill-id="' + id + '" title="Remove ' + id + '" ' +
-            'onclick="event.stopPropagation();removeBill(\'' + id + '\')">&times;</button>' +
+          '<span class="bill-item-id-actions">' +
+            srcLink +
+            '<span class="remove-btn" data-bill-id="' + id + '" title="Remove ' + id + '" ' +
+              'onclick="event.stopPropagation();removeBill(\'' + id + '\')">&times;</span>' +
+          '</span>' +
         '</div>' +
         (title ? '<div class="bill-item-title">' + title + '</div>' : '') +
         (meta   ? '<div class="bill-item-meta">' + meta + '</div>' : '') +
